@@ -30,8 +30,12 @@ public class GameResources {
             cls = Class.forName("pl.cbr.games.snake.GameResources");
             ClassLoader cLoader = cls.getClassLoader();
 
-            ImageIcon iid = new ImageIcon(cLoader.getResource("dot.png"));
-            getResources().put("ball", iid.getImage());
+            ImageIcon iid0 = new ImageIcon(cLoader.getResource("dot0.png"));
+            getResources().put("ball0", iid0.getImage());
+
+            ImageIcon iid1 = new ImageIcon(cLoader.getResource("dot1.png"));
+            getResources().put("ball1", iid1.getImage());
+
 
             ImageIcon iia = new ImageIcon(cLoader.getResource("apple.png"));
             getResources().put("apple", iia.getImage());
@@ -43,8 +47,8 @@ public class GameResources {
         }
     }
 
-    public static Image getBall() {
-        return getResources().get("ball");
+    public static Image getBall(int i) {
+        return getResources().get("ball"+i);
     }
 
     public static Image getApple() {

@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 
 public class Player {
 
+	int id;
     String name;
     int points;
 
@@ -18,14 +19,19 @@ public class Player {
     int startX;
     int startY;
 
-    public Player(String name, int startX, int startY, PlayerConfiguration playerConfiguration) {
-        this.name = name;
+    public Player(int id, String name, int startX, int startY, PlayerConfiguration playerConfiguration) {
+        this.id = id;
+    	this.name = name;
         state = new PlayerState(playerConfiguration);
         board = new PlayerOnBoard();
         this.startX = startX;
         this.startY = startY;
     }
 
+    public int getId() {
+    	return id;
+    }
+    
     public String getName() {
         return name;
     }
@@ -115,7 +121,7 @@ public class Player {
             if (z == 0) {
                 g.drawImage(GameResources.getHead(),  getBoard().getX(z), getBoard().getY(z), board);
             } else {
-                g.drawImage(GameResources.getBall(), getBoard().getX(z), getBoard().getY(z), board);
+                g.drawImage(GameResources.getBall(getId()%2), getBoard().getX(z), getBoard().getY(z), board);
             }
         }
     }

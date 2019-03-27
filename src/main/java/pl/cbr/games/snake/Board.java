@@ -30,11 +30,11 @@ public class Board extends JPanel implements ActionListener {
     public Board() {
         PlayerConfiguration playerConfiguration1 = new PlayerConfiguration(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT
                 , KeyEvent.VK_UP, KeyEvent.VK_DOWN);
-        Player player1 = new Player("mario1", 50, 50, playerConfiguration1);
+        Player player1 = new Player(1, "mario1", 50, 50, playerConfiguration1);
 
         PlayerConfiguration playerConfiguration2 = new PlayerConfiguration(KeyEvent.VK_A, KeyEvent.VK_D
                 , KeyEvent.VK_W, KeyEvent.VK_S);
-        Player player2 = new Player("michal", 200, 200, playerConfiguration2);
+        Player player2 = new Player(2, "michal", 200, 200, playerConfiguration2);
 
         players.add(player1);
         players.add(player2);
@@ -82,7 +82,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void gameOver(Graphics g) {
 
-        String msg = "Game Over ";
+        String msg = "Koniec Gry";
         Font small = new Font("Helvetica", Font.BOLD, 14);
         FontMetrics metr = getFontMetrics(small);
 
@@ -90,7 +90,8 @@ public class Board extends JPanel implements ActionListener {
         g.setFont(small);
         g.drawString(msg, (BoardConfiguration.B_WIDTH - metr.stringWidth(msg)) / 2, BoardConfiguration.B_HEIGHT / 2);
 
-        String pointsTable = "0 : 0";
+        
+        String pointsTable = players.get(0).getPoints() + " : " + players.get(1).getPoints();
         g.drawString(pointsTable, 40, 40);
     }
 
@@ -110,6 +111,7 @@ public class Board extends JPanel implements ActionListener {
             checkApple(player);
             if (!player.checkCollision() ) {
                 timer.stop();
+               
             }
             player.move();
         });
