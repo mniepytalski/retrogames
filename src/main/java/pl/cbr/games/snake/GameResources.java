@@ -2,7 +2,6 @@ package pl.cbr.games.snake;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,20 +25,22 @@ public class GameResources {
 
     private static void loadImages() {
 
+        Class cls = null;
+        try {
+            cls = Class.forName("pl.cbr.games.snake.GameResources");
+            ClassLoader cLoader = cls.getClassLoader();
 
+            ImageIcon iid = new ImageIcon(cLoader.getResource("dot.png"));
+            getResources().put("ball", iid.getImage());
 
-        String resourcePath = "C:\\Roche\\git\\snake\\src\\main\\resources\\";
-        File file = new File(resourcePath);
-        System.out.println(file.getAbsoluteFile());
+            ImageIcon iia = new ImageIcon(cLoader.getResource("apple.png"));
+            getResources().put("apple", iia.getImage());
 
-        ImageIcon iid = new ImageIcon(resourcePath + "dot.png");
-        getResources().put("ball", iid.getImage());
-
-        ImageIcon iia = new ImageIcon(resourcePath + "apple.png");
-        getResources().put("apple", iia.getImage());
-
-        ImageIcon iih = new ImageIcon(resourcePath + "head.png");
-        getResources().put("head", iih.getImage());
+            ImageIcon iih = new ImageIcon(cLoader.getResource("head.png"));
+            getResources().put("head", iih.getImage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Image getBall() {
