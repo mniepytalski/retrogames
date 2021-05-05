@@ -1,20 +1,20 @@
 package pl.cbr.games.snake.player;
 
-import pl.cbr.games.snake.BoardConfiguration;
+import lombok.Data;
+import pl.cbr.games.snake.config.GameConfig;
 
+@Data
 public class PlayerOnBoard {
-
     private int dots;
+    private final int[] x;
+    private final int[] y;
 
-    private final int x[] = new int[BoardConfiguration.ALL_DOTS];
-    private final int y[] = new int[BoardConfiguration.ALL_DOTS];
+    private final GameConfig gameConfig;
 
-    public int[] getX() {
-        return x;
-    }
-
-    public int[] getY() {
-        return y;
+    public PlayerOnBoard(GameConfig gameConfig) {
+        this.gameConfig = gameConfig;
+        x = new int[gameConfig.getAllDots()];
+        y = new int[gameConfig.getAllDots()];
     }
 
     public int getX(int z) {
@@ -23,14 +23,6 @@ public class PlayerOnBoard {
 
     public int getY(int z) {
         return y[z];
-    }
-
-    public int getDots() {
-        return dots;
-    }
-
-    public void setDots(int dots) {
-        this.dots = dots;
     }
 
     public void incDots() {

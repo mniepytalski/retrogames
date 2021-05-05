@@ -1,63 +1,43 @@
 package pl.cbr.games.snake.player;
 
+import lombok.Data;
 import pl.cbr.games.snake.Board;
-import pl.cbr.games.snake.BoardConfiguration;
 import pl.cbr.games.snake.GameResources;
 import pl.cbr.games.snake.MoveDirection;
+import pl.cbr.games.snake.config.GameConfig;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+@Data
 public class Player {
 
-	int id;
-    String name;
-    int points;
+	private int id;
+    private String name;
+    private int startX;
+    private int startY;
+    private PlayerConfiguration playerConfiguration;
+    private PlayerState state;
+    private PlayerOnBoard board;
+    private final GameConfig gameConfig;
 
-    PlayerState state;
-    PlayerOnBoard board;
-    int startX;
-    int startY;
+    private int points;
 
-    public Player(int id, String name, int startX, int startY, PlayerConfiguration playerConfiguration) {
-        this.id = id;
+    private static int idGenerator = 1;
+
+    public Player(String name, int startX, int startY, PlayerConfiguration playerConfiguration, GameConfig gameConfig) {
+        this.id = idGenerator++;
     	this.name = name;
-        state = new PlayerState(playerConfiguration);
-        board = new PlayerOnBoard();
         this.startX = startX;
         this.startY = startY;
-    }
-
-    public int getId() {
-    	return id;
-    }
-    
-    public String getName() {
-        return name;
-    }
-
-    public void resetPlayer() {
-        board.setDots(BoardConfiguration.DOTS_ON_START);
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void addPoint() {
-        points++;
-    }
-
-    public PlayerState getState() {
-        return state;
-    }
-
-    public PlayerOnBoard getBoard() {
-        return board;
+        this.gameConfig = gameConfig;
+        this.playerConfiguration = playerConfiguration;
+        state = new PlayerState(playerConfiguration);
+        board = new PlayerOnBoard(gameConfig);
     }
 
     public void initGame() {
-        board.setDots(BoardConfiguration.DOTS_ON_START);
+        board.setDots(gameConfig.getDotsOnStart());
 
         for (int z = 0; z < board.getDots(); z++) {
             board.getX()[z] = startX - z * 10;
@@ -73,19 +53,19 @@ public class Player {
         }
 
         if (getState().getDirection()== MoveDirection.LEFT) {
-            getBoard().getX()[0] -= BoardConfiguration.DOT_SIZE;
+            getBoard().getX()[0] -= gameConfig.getDotSize();
         }
 
         if (getState().getDirection()==MoveDirection.RIGHT) {
-            getBoard().getX()[0] += BoardConfiguration.DOT_SIZE;
+            getBoard().getX()[0] += gameConfig.getDotSize();
         }
 
         if (getState().getDirection()==MoveDirection.UP) {
-            getBoard().getY()[0] -= BoardConfiguration.DOT_SIZE;
+            getBoard().getY()[0] -= gameConfig.getDotSize();
         }
 
         if (getState().getDirection()==MoveDirection.DOWN) {
-            getBoard().getY()[0] += BoardConfiguration.DOT_SIZE;
+            getBoard().getY()[0] += gameConfig.getDotSize();
         }
     }
 
@@ -98,7 +78,7 @@ public class Player {
             }
         }
 
-        if (getBoard().getY(0) >= BoardConfiguration.B_HEIGHT) {
+        if (getBoard().getY(0) >= gameConfig.getHeight()) {
             getState().setInGame(false);
         }
 
@@ -106,7 +86,7 @@ public class Player {
             getState().setInGame(false);
         }
 
-        if (getBoard().getX(0) >= BoardConfiguration.B_WIDTH) {
+        if (getBoard().getX(0) >= gameConfig.getWidth()) {
             getState().setInGame(false);
         }
 

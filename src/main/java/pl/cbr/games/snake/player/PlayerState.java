@@ -1,7 +1,6 @@
 package pl.cbr.games.snake.player;
 
 import pl.cbr.games.snake.MoveDirection;
-
 import java.awt.event.KeyEvent;
 
 public class PlayerState {
@@ -9,7 +8,7 @@ public class PlayerState {
     private MoveDirection direction;
     private boolean inGame = true;
 
-    PlayerConfiguration playerConfiguration;
+    private final PlayerConfiguration playerConfiguration;
 
     public PlayerState(PlayerConfiguration playerConfiguration) {
         this.direction = MoveDirection.RIGHT;
