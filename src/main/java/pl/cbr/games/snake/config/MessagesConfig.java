@@ -4,7 +4,7 @@ import lombok.Data;
 import pl.cbr.system.config.ConfigFile;
 import pl.cbr.system.config.ConfigKey;
 
-@ConfigFile("messages.properties")
+@ConfigFile(value = "game.properties", prefix = "message.")
 @Data
 public class MessagesConfig {
 

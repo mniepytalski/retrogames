@@ -5,7 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class PlayerConfiguration {
+public class PlayerControlConfiguration {
     private int leftKey;
     private int rightKey;
     private int upKey;

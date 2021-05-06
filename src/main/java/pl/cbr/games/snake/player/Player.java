@@ -3,8 +3,9 @@ package pl.cbr.games.snake.player;
 import lombok.Data;
 import pl.cbr.games.snake.Board;
 import pl.cbr.games.snake.GameResources;
-import pl.cbr.games.snake.MoveDirection;
 import pl.cbr.games.snake.config.GameConfig;
+import pl.cbr.games.snake.geom2d.Point;
+import pl.cbr.games.snake.geom2d.Rectangle;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -14,99 +15,54 @@ public class Player {
 
 	private int id;
     private String name;
-    private int startX;
-    private int startY;
-    private PlayerConfiguration playerConfiguration;
-    private PlayerState state;
-    private PlayerOnBoard board;
+    private final Point startPosition;
+    private PlayerControlConfiguration playerControlConfiguration;
+    private PlayerState playerState;
+    private PlayerModel playerModel;
     private final GameConfig gameConfig;
 
     private int points;
 
     private static int idGenerator = 1;
 
-    public Player(String name, int startX, int startY, PlayerConfiguration playerConfiguration, GameConfig gameConfig) {
+    public Player(String name, Point startPosition, PlayerControlConfiguration playerControlConfiguration, GameConfig gameConfig) {
         this.id = idGenerator++;
     	this.name = name;
-        this.startX = startX;
-        this.startY = startY;
+        this.startPosition = startPosition;
         this.gameConfig = gameConfig;
-        this.playerConfiguration = playerConfiguration;
-        state = new PlayerState(playerConfiguration);
-        board = new PlayerOnBoard(gameConfig);
+        this.playerControlConfiguration = playerControlConfiguration;
+        playerState = new PlayerState(playerControlConfiguration);
+        playerModel = new PlayerModel(gameConfig);
     }
 
     public void initGame() {
-        board.setDots(gameConfig.getDotsOnStart());
-
-        for (int z = 0; z < board.getDots(); z++) {
-            board.getX()[z] = startX - z * 10;
-            board.getY()[z] = startY;
-        }
+        playerModel.initPlayer(startPosition);
     }
 
     public void move() {
-
-        for (int z = getBoard().getDots(); z > 0; z--) {
-            getBoard().getX()[z] = getBoard().getX(z - 1);
-            getBoard().getY()[z] = getBoard().getY(z - 1);
-        }
-
-        if (getState().getDirection()== MoveDirection.LEFT) {
-            getBoard().getX()[0] -= gameConfig.getDotSize();
-        }
-
-        if (getState().getDirection()==MoveDirection.RIGHT) {
-            getBoard().getX()[0] += gameConfig.getDotSize();
-        }
-
-        if (getState().getDirection()==MoveDirection.UP) {
-            getBoard().getY()[0] -= gameConfig.getDotSize();
-        }
-
-        if (getState().getDirection()==MoveDirection.DOWN) {
-            getBoard().getY()[0] += gameConfig.getDotSize();
-        }
+        getPlayerModel().move(getPlayerState().getDirection());
     }
 
     public boolean checkCollision() {
-        for (int z = getBoard().getDots(); z > 0; z--) {
+        getPlayerState().setInGame(!getPlayerModel().checkOurselfCollision());
 
-            if ((z > 4) && (getBoard().getX(0) == getBoard().getX(z)) &&
-                    (getBoard().getY(0) == getBoard().getY(z))) {
-                getState().setInGame(false);
-            }
-        }
+        Rectangle boardRectangle = new Rectangle(new Point(0,0), new Point(gameConfig.getWidth(),gameConfig.getHeight()));
+        getPlayerState().setInGame(!getPlayerModel().isOutside(boardRectangle));
 
-        if (getBoard().getY(0) >= gameConfig.getHeight()) {
-            getState().setInGame(false);
-        }
-
-        if (getBoard().getY(0) < 0) {
-            getState().setInGame(false);
-        }
-
-        if (getBoard().getX(0) >= gameConfig.getWidth()) {
-            getState().setInGame(false);
-        }
-
-        if (getBoard().getX(0) < 0) {
-            getState().setInGame(false);
-        }
-        return getState().isInGame();
+        return getPlayerState().isInGame();
     }
 
     public void doDrawing(Graphics g, Board board) {
-        for (int z = 0; z < getBoard().getDots(); z++) {
+        for (int z = 0; z < getPlayerModel().getLength(); z++) {
             if (z == 0) {
-                g.drawImage(GameResources.getHead(),  getBoard().getX(z), getBoard().getY(z), board);
+                g.drawImage(GameResources.getHead(),  getPlayerModel().get(z).getX(), getPlayerModel().get(z).getY(), board);
             } else {
-                g.drawImage(GameResources.getBall(getId()%2), getBoard().getX(z), getBoard().getY(z), board);
+                g.drawImage(GameResources.getBall(getId()%2), getPlayerModel().get(z).getX(), getPlayerModel().get(z).getY(), board);
             }
         }
     }
 
     public void keyPressed(KeyEvent e) {
-        getState().keyPressed(e);
+        getPlayerState().keyPressed(e);
     }
 }

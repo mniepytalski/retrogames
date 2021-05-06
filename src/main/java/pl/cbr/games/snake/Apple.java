@@ -1,21 +1,24 @@
 package pl.cbr.games.snake;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import pl.cbr.games.snake.config.GameConfig;
+import pl.cbr.games.snake.geom2d.Point;
 
 @Data
-@AllArgsConstructor
 public class Apple {
-    private int x;
-    private int y;
+    private final Point position;
     private final GameConfig gameConfig;
 
-    public void locateApple() {
+    public Apple(GameConfig gameConfig) {
+        this.gameConfig = gameConfig;
+        this.position = new Point(0,0);
+    }
+
+    public void setRandomPosition() {
         int r = (int) (Math.random() * gameConfig.getRandomPosition());
-        x = r * gameConfig.getDotSize();
+        position.setX(r * gameConfig.getDotSize());
 
         r = (int) (Math.random() * gameConfig.getRandomPosition());
-        y = r * gameConfig.getDotSize();
+        position.setY(r * gameConfig.getDotSize());
     }
 }

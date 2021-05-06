@@ -2,8 +2,9 @@ package pl.cbr.games.snake;
 
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.config.MessagesConfig;
+import pl.cbr.games.snake.geom2d.Point;
 import pl.cbr.games.snake.player.Player;
-import pl.cbr.games.snake.player.PlayerConfiguration;
+import pl.cbr.games.snake.player.PlayerControlConfiguration;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,8 +23,8 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
-    private GameConfig gameConfig;
-    private MessagesConfig messages;
+    private final GameConfig gameConfig;
+    private final MessagesConfig messages;
 
     private Timer timer;
 
@@ -36,17 +37,17 @@ public class Board extends JPanel implements ActionListener {
         this.gameConfig = gameConfig;
         this.messages = messages;
         players = new ArrayList<>();
-        apple = new Apple(0,0, gameConfig);
+        apple = new Apple(gameConfig);
 
-        PlayerConfiguration playerConfiguration1 = new PlayerConfiguration(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT
+        PlayerControlConfiguration playerControlConfiguration1 = new PlayerControlConfiguration(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT
                 , KeyEvent.VK_UP, KeyEvent.VK_DOWN);
-        Player player1 = new Player(gameConfig.getPlayer1Name(), gameConfig.getPlayer1PositionX(),
-                gameConfig.getPlayer1PositionY(), playerConfiguration1, gameConfig);
+        Player player1 = new Player(gameConfig.getPlayer1Name(), new Point(gameConfig.getPlayer1PositionX(),
+                gameConfig.getPlayer1PositionY()), playerControlConfiguration1, gameConfig);
 
-        PlayerConfiguration playerConfiguration2 = new PlayerConfiguration(KeyEvent.VK_A, KeyEvent.VK_D
+        PlayerControlConfiguration playerControlConfiguration2 = new PlayerControlConfiguration(KeyEvent.VK_A, KeyEvent.VK_D
                 , KeyEvent.VK_W, KeyEvent.VK_S);
-        Player player2 = new Player(gameConfig.getPlayer2Name(), gameConfig.getPlayer2PositionX(),
-                gameConfig.getPlayer2PositionY(), playerConfiguration2, gameConfig);
+        Player player2 = new Player(gameConfig.getPlayer2Name(), new Point(gameConfig.getPlayer2PositionX(),
+                gameConfig.getPlayer2PositionY()), playerControlConfiguration2, gameConfig);
 
         players.add(player1);
         players.add(player2);
@@ -65,7 +66,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void initGame() {
         players.forEach(Player::initGame);
-        apple.locateApple();
+        apple.setRandomPosition();
         timer = new Timer(DELAY, this);
         timer.start();
     }
@@ -78,8 +79,8 @@ public class Board extends JPanel implements ActionListener {
 
     private void doDrawing(Graphics g) {
         for ( Player player : players) {
-            if (player.getState().isInGame()) {
-                g.drawImage(GameResources.getApple(), apple.getX(), apple.getY(), this);
+            if (player.getPlayerState().isInGame()) {
+                g.drawImage(GameResources.getApple(), apple.getPosition().getX(), apple.getPosition().getY(), this);
                 player.doDrawing(g, this);
                 Toolkit.getDefaultToolkit().sync();
             } else {
@@ -90,12 +91,12 @@ public class Board extends JPanel implements ActionListener {
 
     private void gameOver(Graphics g) {
         Font small = new Font("Helvetica", Font.BOLD, 14);
-        FontMetrics metr = getFontMetrics(small);
+        FontMetrics fontMetrics = getFontMetrics(small);
 
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(messages.getEndGame(),
-                (gameConfig.getWidth() - metr.stringWidth(messages.getEndGame())) / 2,
+                (gameConfig.getWidth() - fontMetrics.stringWidth(messages.getEndGame())) / 2,
                 gameConfig.getHeight() / 2);
 
         String pointsTable = players.get(0).getPoints() + " : " + players.get(1).getPoints();
@@ -103,15 +104,15 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void checkApple(Player player) {
-        if ((player.getBoard().getX(0) == apple.getX()) && (player.getBoard().getY(0) == apple.getY())) {
-            player.getBoard().incDots();
-            apple.locateApple();
+        if ( player.getPlayerModel().get(0).equals(apple.getPosition())) {
+            player.getPlayerModel().incLength();
+            apple.setRandomPosition();
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        players.stream().filter(player -> player.getState().isInGame()).forEach(player -> {
+        players.stream().filter(player -> player.getPlayerState().isInGame()).forEach(player -> {
             checkApple(player);
             if (!player.checkCollision() ) {
                 timer.stop();

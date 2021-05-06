@@ -21,7 +21,7 @@ public class GameConfig {
     int dotSize;
 
     @ConfigKey("board.dots-on-start")
-    int dotsOnStart;
+    int startLength;
 
     @ConfigKey("board.random-position")
     int randomPosition;

@@ -20,14 +20,15 @@ public class SystemConfiguration<T> {
         Optional<Annotation> annotationOpt = Arrays.stream(configurationObject.getClass().getAnnotations())
                 .filter(annotation -> annotation.annotationType().equals(ConfigFile.class)).findFirst();
         if (annotationOpt.isPresent()) {
-            Properties properties = configUtil.getProperties(((ConfigFile) annotationOpt.get()).value());
+            ConfigFile configFile = (ConfigFile) annotationOpt.get();
+            Properties properties = configUtil.getProperties(configFile.value());
             Field[] fields = configurationObject.getClass().getDeclaredFields();
             for (Field field : fields) {
                 Annotation[] annotationsArray = field.getDeclaredAnnotations();
                 Optional<Annotation> annotationFieldOpt = Arrays.stream(annotationsArray)
                         .filter(annotation -> annotation.annotationType().equals(ConfigKey.class)).findFirst();
                 annotationFieldOpt.ifPresent(annotation -> setValue(configurationObject, field,
-                        ((ConfigKey) annotation).value(), properties));
+                        configFile.prefix()+((ConfigKey) annotation).value(), properties));
             }
         }
         log.info(configurationObject.toString());
