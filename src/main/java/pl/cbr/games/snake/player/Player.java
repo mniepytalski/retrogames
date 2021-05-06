@@ -53,11 +53,12 @@ public class Player {
     }
 
     public void doDrawing(Graphics g, Board board) {
-        for (int z = 0; z < getPlayerModel().getLength(); z++) {
+        for (int z = 0; z < getPlayerModel().getViewSize(); z++) {
+            Point point = getPlayerModel().get(z);
             if (z == 0) {
-                g.drawImage(GameResources.getHead(),  getPlayerModel().get(z).getX(), getPlayerModel().get(z).getY(), board);
+                g.drawImage(GameResources.getHead(),  point.getX(), point.getY(), board);
             } else {
-                g.drawImage(GameResources.getBall(getId()%2), getPlayerModel().get(z).getX(), getPlayerModel().get(z).getY(), board);
+                g.drawImage(GameResources.getBall(getId()%2), point.getX(), point.getY(), board);
             }
         }
     }
