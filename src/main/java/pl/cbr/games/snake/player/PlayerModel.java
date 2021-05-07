@@ -1,6 +1,7 @@
 package pl.cbr.games.snake.player;
 
 import pl.cbr.games.snake.config.GameConfig;
+import pl.cbr.games.snake.geom2d.Collision;
 import pl.cbr.games.snake.geom2d.Point;
 import pl.cbr.games.snake.geom2d.Rectangle;
 import java.util.ArrayList;
@@ -55,12 +56,8 @@ public class PlayerModel {
     }
 
     public boolean checkOurselfCollision() {
-        for (int z = getViewSize()-1; z > 0; z--) {
-            if ((z > 4) && getHead().equals(get(z))) {
-                return true;
-            }
-        }
-        return false;
+        Collision collision = new Collision();
+        return collision.check(view);
     }
 
     public boolean isOutside(Rectangle boardModel) {

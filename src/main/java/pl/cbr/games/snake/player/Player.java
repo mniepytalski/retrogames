@@ -44,7 +44,10 @@ public class Player {
     }
 
     public boolean checkCollision() {
-        getPlayerState().setInGame(!getPlayerModel().checkOurselfCollision());
+        if ( getPlayerModel().checkOurselfCollision() ) {
+            getPlayerState().setInGame(false);
+            return true;
+        }
 
         Rectangle boardRectangle = new Rectangle(new Point(0,0), new Point(gameConfig.getWidth(),gameConfig.getHeight()));
         getPlayerState().setInGame(!getPlayerModel().isOutside(boardRectangle));

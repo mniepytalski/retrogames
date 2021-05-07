@@ -30,6 +30,7 @@ public class Board extends JPanel implements ActionListener {
 
     private final Apple apple;
     private final List<Player> players;
+    private GameStatus gameStatus = GameStatus.RUNNING;
 
     private final static int DELAY = 140;
 
@@ -71,20 +72,29 @@ public class Board extends JPanel implements ActionListener {
         timer.start();
     }
 
+    private void stopGame() {
+        gameStatus = GameStatus.STOP;
+        timer.stop();
+    }
+
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        doDrawing(g);
+        if ( gameStatus.equals(GameStatus.RUNNING)) {
+            super.paintComponent(g);
+            doDrawing(g);
+        }
     }
 
     private void doDrawing(Graphics g) {
-        for ( Player player : players) {
-            if (player.getPlayerState().isInGame()) {
-                g.drawImage(GameResources.getApple(), apple.getPosition().getX(), apple.getPosition().getY(), this);
-                player.doDrawing(g, this);
-                Toolkit.getDefaultToolkit().sync();
-            } else {
-                gameOver(g);
+        if ( gameStatus.equals(GameStatus.RUNNING)) {
+            for (Player player : players) {
+                if (player.getPlayerState().isInGame()) {
+                    g.drawImage(GameResources.getApple(), apple.getPosition().getX(), apple.getPosition().getY(), this);
+                    player.doDrawing(g, this);
+                    Toolkit.getDefaultToolkit().sync();
+                } else {
+                    gameOver(g);
+                }
             }
         }
     }
@@ -99,7 +109,7 @@ public class Board extends JPanel implements ActionListener {
                 (gameConfig.getWidth() - fontMetrics.stringWidth(messages.getEndGame())) / 2,
                 gameConfig.getHeight() / 2);
 
-        String pointsTable = players.get(0).getPoints() + " : " + players.get(1).getPoints();
+        String pointsTable = "Nie ma punktow, koniec gry";
         g.drawString(pointsTable, 40, 40);
     }
 
@@ -115,6 +125,7 @@ public class Board extends JPanel implements ActionListener {
         players.stream().filter(player -> player.getPlayerState().isInGame()).forEach(player -> {
             checkApple(player);
             if (!player.checkCollision() ) {
+                stopGame();
                 timer.stop();
             }
             player.move();
