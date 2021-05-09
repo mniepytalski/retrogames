@@ -22,7 +22,7 @@ public class Snake extends JFrame {
     }
 
     private void initUI() {
-        add(new Board(gameConfig, messagesConfig));
+        add(new Board(this, gameConfig, messagesConfig));
 
         setResizable(false);
         pack();

@@ -11,10 +11,12 @@ public class PlayerModel {
     private int length;
     private final List<Point> view;
     private final GameConfig gameConfig;
+    private final DirectionService directionService;
 
     public PlayerModel(GameConfig gameConfig) {
         view = new ArrayList<>();
         this.gameConfig = gameConfig;
+        directionService = new DirectionService(gameConfig);
     }
 
     public void initPlayer(Point startPosition) {
@@ -30,18 +32,7 @@ public class PlayerModel {
     }
 
     public void move(MoveDirection direction) {
-        if (direction == MoveDirection.LEFT) {
-            addHaed(getHead().minus(new Point(gameConfig.getDotSize(),0)));
-        }
-        if (direction==MoveDirection.RIGHT) {
-            addHaed(getHead().add(new Point(gameConfig.getDotSize(),0)));
-        }
-        if (direction==MoveDirection.UP) {
-            addHaed(getHead().minus(new Point(0,gameConfig.getDotSize())));
-        }
-        if (direction==MoveDirection.DOWN) {
-            addHaed(getHead().add(new Point(0,gameConfig.getDotSize())));
-        }
+        addHaed(getHead().add(directionService.getVector(direction)));
         limitTail();
     }
 
@@ -64,8 +55,8 @@ public class PlayerModel {
         return boardModel.isOutside(getHead());
     }
 
-    public void incLength() {
-        length++;
+    public void addLength(int value) {
+        length += value;
     }
 
     public int getLength() {

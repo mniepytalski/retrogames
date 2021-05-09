@@ -25,6 +25,7 @@ public class Board extends JPanel implements ActionListener {
 
     private final GameConfig gameConfig;
     private final MessagesConfig messages;
+    Snake snake;
 
     private Timer timer;
 
@@ -34,11 +35,12 @@ public class Board extends JPanel implements ActionListener {
 
     private final static int DELAY = 140;
 
-    public Board(GameConfig gameConfig, MessagesConfig messages) {
+    public Board(Snake snake, GameConfig gameConfig, MessagesConfig messages) {
         this.gameConfig = gameConfig;
         this.messages = messages;
         players = new ArrayList<>();
         apple = new Apple(gameConfig);
+        this.snake = snake;
 
         PlayerControlConfiguration playerControlConfiguration1 = new PlayerControlConfiguration(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT
                 , KeyEvent.VK_UP, KeyEvent.VK_DOWN);
@@ -75,6 +77,7 @@ public class Board extends JPanel implements ActionListener {
     private void stopGame() {
         gameStatus = GameStatus.STOP;
         timer.stop();
+        snake.setTitle("XoXoXoX");
     }
 
     @Override
@@ -115,7 +118,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void checkApple(Player player) {
         if ( player.getPlayerModel().get(0).equals(apple.getPosition())) {
-            player.getPlayerModel().incLength();
+            player.getPlayerModel().addLength(5);
             apple.setRandomPosition();
         }
     }
