@@ -53,7 +53,7 @@ public class Board extends JPanel implements ActionListener {
                 gameConfig.getPlayer2PositionY()), playerControlConfiguration2, gameConfig);
 
         players.add(player1);
-        players.add(player2);
+ //       players.add(player2);
 
         initBoard();
     }
