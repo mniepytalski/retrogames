@@ -16,7 +16,7 @@ public class PlayerModel {
     public PlayerModel(GameConfig gameConfig) {
         view = new ArrayList<>();
         this.gameConfig = gameConfig;
-        directionService = new DirectionService(gameConfig);
+        directionService = new DirectionService();
     }
 
     public void initPlayer(Point startPosition) {
@@ -27,7 +27,7 @@ public class PlayerModel {
 
     private void initPlayerView(Point startPosition) {
         for (int z = 0; z < getLength(); z++) {
-            view.add((new Point(startPosition.getX() - z * gameConfig.getDotSize(), startPosition.getY())));
+            view.add((new Point(startPosition.getX() - z, startPosition.getY())));
         }
     }
 

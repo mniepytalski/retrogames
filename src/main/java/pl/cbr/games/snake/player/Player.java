@@ -49,7 +49,8 @@ public class Player {
             return true;
         }
 
-        Rectangle boardRectangle = new Rectangle(new Point(0,0), new Point(gameConfig.getWidth(),gameConfig.getHeight()));
+        Rectangle boardRectangle = new Rectangle(new Point(0,0),
+                (new Point(gameConfig.getWidth(),gameConfig.getHeight())).division(gameConfig.getDotSize()));
         getPlayerState().setInGame(!getPlayerModel().isOutside(boardRectangle));
 
         return getPlayerState().isInGame();
@@ -57,7 +58,7 @@ public class Player {
 
     public void doDrawing(Graphics g, Board board) {
         for (int z = 0; z < getPlayerModel().getViewSize(); z++) {
-            Point point = getPlayerModel().get(z);
+            Point point = getPlayerModel().get(z).multiply(gameConfig.getDotSize());
             if (z == 0) {
                 g.drawImage(GameResources.getHead(),  point.getX(), point.getY(), board);
             } else {

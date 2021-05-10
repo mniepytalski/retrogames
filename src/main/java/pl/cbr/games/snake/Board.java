@@ -32,14 +32,16 @@ public class Board extends JPanel implements ActionListener {
     private final Apple apple;
     private final List<Player> players;
     private GameStatus gameStatus = GameStatus.RUNNING;
+    private final BoardModel boardModel;
 
-    private final static int DELAY = 140;
+    private final static int DELAY = 250;
 
     public Board(Snake snake, GameConfig gameConfig, MessagesConfig messages) {
         this.gameConfig = gameConfig;
         this.messages = messages;
+        this.boardModel = new BoardModel(gameConfig);
         players = new ArrayList<>();
-        apple = new Apple(gameConfig);
+        apple = new Apple(boardModel);
         this.snake = snake;
 
         PlayerControlConfiguration playerControlConfiguration1 = new PlayerControlConfiguration(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT
@@ -90,15 +92,16 @@ public class Board extends JPanel implements ActionListener {
 
     private void doDrawing(Graphics g) {
         if ( gameStatus.equals(GameStatus.RUNNING)) {
+            Point applePosition = apple.getPosition().multiply(gameConfig.getDotSize());
             for (Player player : players) {
                 if (player.getPlayerState().isInGame()) {
-                    g.drawImage(GameResources.getApple(), apple.getPosition().getX(), apple.getPosition().getY(), this);
                     player.doDrawing(g, this);
-                    Toolkit.getDefaultToolkit().sync();
                 } else {
                     gameOver(g);
                 }
             }
+            g.drawImage(GameResources.getApple(), applePosition.getX(), applePosition.getY(), this);
+            Toolkit.getDefaultToolkit().sync();
         }
     }
 

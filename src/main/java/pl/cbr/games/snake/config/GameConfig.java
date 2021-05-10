@@ -8,9 +8,6 @@ import pl.cbr.system.config.ConfigKey;
 @Data
 public class GameConfig {
 
-    @ConfigKey("board.all-dots")
-    int allDots;
-
     @ConfigKey("board.width")
     int width;
 
@@ -22,9 +19,6 @@ public class GameConfig {
 
     @ConfigKey("board.dots-on-start")
     int startLength;
-
-    @ConfigKey("board.random-position")
-    int randomPosition;
 
     @ConfigKey("players.1.name")
     String player1Name;

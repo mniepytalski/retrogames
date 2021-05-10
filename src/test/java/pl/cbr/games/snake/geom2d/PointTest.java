@@ -67,23 +67,24 @@ public class PointTest {
         int value = 10;
 
         //
-        pointA.multiply(value);
+        Point pointB = pointA.multiply(value);
 
         //
-        Assert.assertEquals(200, pointA.getX());
-        Assert.assertEquals(300, pointA.getY());
+        Assert.assertEquals(200, pointB.getX());
+        Assert.assertEquals(300, pointB.getY());
     }
 
+    @Test
     public void testDivision() {
         // given
         Point pointA = new Point(200,300);
         int value = 10;
 
         //
-        pointA.division(value);
+        Point pointB = pointA.division(value);
 
         //
-        Assert.assertEquals(20, pointA.getX());
-        Assert.assertEquals(30, pointA.getY());
+        Assert.assertEquals(20, pointB.getX());
+        Assert.assertEquals(30, pointB.getY());
     }
 }

@@ -27,13 +27,11 @@ public class Point {
         y = a.getY();
     }
 
-    public void multiply(int value) {
-        x *= value;
-        y *= value;
+    public Point multiply(int value) {
+        return new Point(getX() * value, getY() * value);
     }
 
-    public void division(int value) {
-        x /= value;
-        y /= value;
+    public Point division(int value) {
+        return new Point(getX() / value, getY() / value);
     }
 }
