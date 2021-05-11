@@ -23,23 +23,22 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
 
-    private final GameConfig gameConfig;
-    private final MessagesConfig messages;
+    private final transient GameConfig gameConfig;
+    private final transient MessagesConfig messages;
     Snake snake;
 
     private Timer timer;
 
-    private final Apple apple;
-    private final List<Player> players;
+    private final transient Apple apple;
+    private final transient List<Player> players;
     private GameStatus gameStatus = GameStatus.RUNNING;
-    private final BoardModel boardModel;
 
     private final static int DELAY = 250;
 
     public Board(Snake snake, GameConfig gameConfig, MessagesConfig messages) {
         this.gameConfig = gameConfig;
         this.messages = messages;
-        this.boardModel = new BoardModel(gameConfig);
+        BoardModel boardModel = new BoardModel(gameConfig);
         players = new ArrayList<>();
         apple = new Apple(boardModel);
         this.snake = snake;

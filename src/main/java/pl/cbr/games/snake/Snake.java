@@ -34,10 +34,6 @@ public class Snake extends JFrame {
                 .getConfiguration("pl.cbr.games.snake.config.MessagesConfig");
 
         Snake app = new Snake(gameConfig, messagesConfig);
-
-        EventQueue.invokeLater(() -> {
-            JFrame ex = app;
-            ex.setVisible(true);
-        });
+        EventQueue.invokeLater(() -> app.setVisible(true));
     }
 }

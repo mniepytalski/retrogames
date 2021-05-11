@@ -31,7 +31,6 @@ public class SystemConfiguration<T> {
                         configFile.prefix()+((ConfigKey) annotation).value(), properties));
             }
         }
-        log.info(configurationObject.toString());
     }
 
     private void setValue(T configObject, Field field, String key,Properties properties) {
