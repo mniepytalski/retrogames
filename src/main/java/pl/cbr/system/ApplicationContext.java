@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import pl.cbr.system.config.ConfigFile;
+import pl.cbr.system.config.ConfigInterface;
 import pl.cbr.system.config.SystemConfiguration;
 
 import java.lang.reflect.Constructor;
@@ -18,8 +19,7 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplicationContext {
 
-    private final Map<String,Object> configurationClasses = new HashMap<>();
-    private final SystemConfiguration systemConfiguration = new SystemConfiguration();
+    private final Map<String, ConfigInterface> configurationClasses = new HashMap<>();
 
     private static ApplicationContext applicationContext;
 
@@ -37,6 +37,7 @@ public class ApplicationContext {
 
     public void start(String packagePath) {
         final Reflections reflections = new Reflections(packagePath);
+        SystemConfiguration<ConfigInterface> systemConfiguration = new SystemConfiguration<>();
 
         log.info("Configuration Classes for package: {}", packagePath);
         Set<Class<?>> allConfigTypes = reflections.getTypesAnnotatedWith(ConfigFile.class);
@@ -44,8 +45,8 @@ public class ApplicationContext {
             try {
                 Optional<Object> objectOptional = createConfigClassForName(configClass);
                 if ( objectOptional.isPresent()) {
-                    configurationClasses.put(configClass.getTypeName(), objectOptional.get());
-                    systemConfiguration.loadConfiguration(objectOptional.get());
+                    configurationClasses.put(configClass.getTypeName(), (ConfigInterface) objectOptional.get());
+                    systemConfiguration.loadConfiguration((ConfigInterface) objectOptional.get());
                     log.info("CLASS: {}", objectOptional.get().toString());
                 }
             } catch (ClassNotFoundException e) {
@@ -53,7 +54,7 @@ public class ApplicationContext {
             }
         }
 
-        log.info("system classes");
+        log.info("System Classes for package: {}", packagePath);
         Set<Class<?>> allTypes = reflections.getTypesAnnotatedWith(SystemComponent.class);
         for (Class<?> configClass : allTypes) {
             log.info(""+configClass.getTypeName());

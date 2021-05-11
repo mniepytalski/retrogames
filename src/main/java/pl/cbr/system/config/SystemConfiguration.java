@@ -40,30 +40,37 @@ public class SystemConfiguration<T> {
         try {
             Method method = configObject.getClass().getMethod("set" + StringUtils.capitalize(field.getName()), getClassForType(field));
             if (method.getParameterCount() == 1 ) {
-                Class[] methodTypes = method.getParameterTypes();
-
+                Class<?>[] methodTypes = method.getParameterTypes();
                 if ( methodTypes[0].getTypeName().equals("java.lang.String") ) {
                     method.invoke(configObject, value);
                 }
-                if (StringUtils.isNumeric(value.toString())) {
-                    if ( methodTypes[0].getTypeName().equals("java.lang.Long") || methodTypes[0].getTypeName().equals("long")) {
-                        method.invoke(configObject, Long.parseLong(value.toString()));
-                    }
-                    if ( methodTypes[0].getTypeName().equals("java.lang.Integer") || methodTypes[0].getTypeName().equals("int")) {
-                        method.invoke(configObject, Integer.parseInt(value.toString()));
-                    }
-                }
-                if ( methodTypes[0].getTypeName().equals("java.lang.Boolean") || methodTypes[0].getTypeName().equals("boolean")) {
-                    method.invoke(configObject, Boolean.parseBoolean(value.toString()));
-                }
+                invokeNumeric(method, value, methodTypes, configObject);
+                invokeBoolean(method, value, methodTypes, configObject);
             }
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException|IllegalArgumentException e) {
             log.error("setting parameter:{} error",key, e);
         }
     }
 
-    private Class getClassForType(Field field) {
-        switch(((Class) field.getGenericType()).getName()) {
+    private void invokeNumeric(Method method, Object value, Class<?>[] methodTypes, T configObject) throws InvocationTargetException, IllegalAccessException {
+        if (StringUtils.isNumeric(value.toString())) {
+            if (methodTypes[0].getTypeName().equals("java.lang.Long") || methodTypes[0].getTypeName().equals("long")) {
+                method.invoke(configObject, Long.parseLong(value.toString()));
+            }
+            if (methodTypes[0].getTypeName().equals("java.lang.Integer") || methodTypes[0].getTypeName().equals("int")) {
+                method.invoke(configObject, Integer.parseInt(value.toString()));
+            }
+        }
+    }
+
+    private void invokeBoolean(Method method, Object value, Class<?>[] methodTypes, T configObject) throws InvocationTargetException, IllegalAccessException {
+        if ( methodTypes[0].getTypeName().equals("java.lang.Boolean") || methodTypes[0].getTypeName().equals("boolean")) {
+            method.invoke(configObject, Boolean.parseBoolean(value.toString()));
+        }
+    }
+
+    private Class<?> getClassForType(Field field) {
+        switch(((Class<?>) field.getGenericType()).getName()) {
             case "java.lang.Long":
                 return Long.class;
             case "long":

@@ -2,11 +2,12 @@ package pl.cbr.games.snake.config;
 
 import lombok.Data;
 import pl.cbr.system.config.ConfigFile;
+import pl.cbr.system.config.ConfigInterface;
 import pl.cbr.system.config.ConfigKey;
 
 @ConfigFile("game.properties")
 @Data
-public class GameConfig {
+public class GameConfig implements ConfigInterface {
 
     @ConfigKey("board.width")
     int width;
