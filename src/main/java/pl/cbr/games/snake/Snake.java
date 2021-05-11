@@ -4,7 +4,6 @@ import lombok.Getter;
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.config.MessagesConfig;
 import pl.cbr.system.ApplicationContext;
-import pl.cbr.system.config.SystemConfiguration;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -12,16 +11,11 @@ import javax.swing.JFrame;
 @Getter
 public class Snake extends JFrame {
 
-    private final GameConfig gameConfig;
-    private final MessagesConfig messagesConfig;
-
     public Snake(GameConfig gameConfig, MessagesConfig messagesConfig) {
-        this.gameConfig = gameConfig;
-        this.messagesConfig = messagesConfig;
-        initUI();
+        initUI(gameConfig, messagesConfig);
     }
 
-    private void initUI() {
+    private void initUI(GameConfig gameConfig, MessagesConfig messagesConfig) {
         add(new Board(this, gameConfig, messagesConfig));
 
         setResizable(false);
@@ -33,14 +27,11 @@ public class Snake extends JFrame {
     }
 
     public static void main(String[] args) {
-        ApplicationContext context = new ApplicationContext();
-        context.start();
-
-        MessagesConfig messagesConfig = new MessagesConfig();
-        GameConfig gameConfig = new GameConfig();
-        SystemConfiguration systemConfiguration = new SystemConfiguration();
-        systemConfiguration.loadConfiguration(messagesConfig);
-        systemConfiguration.loadConfiguration(gameConfig);
+        ApplicationContext applicationContext = ApplicationContext.getInstance("pl.cbr");
+        GameConfig gameConfig = (GameConfig)applicationContext
+                .getConfiguration("pl.cbr.games.snake.config.GameConfig");
+        MessagesConfig messagesConfig = (MessagesConfig)applicationContext
+                .getConfiguration("pl.cbr.games.snake.config.MessagesConfig");
 
         Snake app = new Snake(gameConfig, messagesConfig);
 
