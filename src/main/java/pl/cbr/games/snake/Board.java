@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.config.MessagesConfig;
 import pl.cbr.games.snake.config.PlayerConfig;
-import pl.cbr.games.snake.geom2d.Point;
 import pl.cbr.games.snake.player.Player;
 
 import java.awt.Color;
@@ -23,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 @Component
-public class Board extends JPanel implements ActionListener {
+public class Board extends JPanel implements ActionListener, Drawing {
 
     private final GameConfig gameConfig;
     private final MessagesConfig messages;
@@ -34,18 +33,21 @@ public class Board extends JPanel implements ActionListener {
     private final transient List<Player> players;
     private GameStatus gameStatus = GameStatus.RUNNING;
 
+    private List<Drawing> drawingList = new ArrayList<>();
 
-    private final static int DELAY = 250;
+    private final static int DELAY = 200;
 
     public Board(GameConfig gameConfig, MessagesConfig messages ) {
         this.gameConfig = gameConfig;
         this.messages = messages;
         players = new ArrayList<>();
-        apple = new Apple(new BoardModel(gameConfig));
         for (PlayerConfig playerConfig: this.gameConfig.getPlayers()) {
             Player player = new Player(playerConfig, gameConfig);
             players.add(player);
+            drawingList.add(player);
         }
+        apple = new Apple(gameConfig);;
+        drawingList.add(apple);
         initBoard();
     }
 
@@ -67,7 +69,6 @@ public class Board extends JPanel implements ActionListener {
 
     private void stopGame() {
         gameStatus = GameStatus.STOP;
-        timer.stop();
     }
 
     @Override
@@ -78,19 +79,18 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void doDrawing(Graphics g) {
-        if ( gameStatus.equals(GameStatus.RUNNING)) {
-            Point applePosition = apple.getPosition().multiply(gameConfig.getDotSize());
-            for (Player player : players) {
-                if (player.getPlayerState().isInGame()) {
-                    player.doDrawing(g, this);
-                } else {
-                    gameOver(g);
-                }
-            }
-            g.drawImage(GameResources.getApple(), applePosition.getX(), applePosition.getY(), this);
-            Toolkit.getDefaultToolkit().sync();
+    public void doDrawing(Graphics g) {
+        if (players.stream().filter(player -> !player.getPlayerState().isInGame()).findFirst().isPresent() ) {
+            gameStatus = GameStatus.STOP;
         }
+
+        if ( gameStatus.equals(GameStatus.RUNNING)) {
+            drawingList.forEach( objectToDraw -> objectToDraw.doDrawing(g));
+        }
+        if ( gameStatus.equals(GameStatus.STOP)) {
+            gameOver(g);
+        }
+        Toolkit.getDefaultToolkit().sync();
     }
 
     private void gameOver(Graphics g) {
@@ -103,8 +103,7 @@ public class Board extends JPanel implements ActionListener {
                 (gameConfig.getWidth() - fontMetrics.stringWidth(messages.getEndGame())) / 2,
                 gameConfig.getHeight() / 2);
 
-        String pointsTable = "Nie ma punktow, koniec gry";
-        g.drawString(pointsTable, 40, 40);
+        g.drawString(messages.getEndGame(), 40, 40);
     }
 
     private void checkApple(Player player) {

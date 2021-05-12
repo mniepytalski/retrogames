@@ -1,5 +1,6 @@
 package pl.cbr.games.snake.player;
 
+import lombok.Getter;
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.geom2d.Collision;
 import pl.cbr.games.snake.geom2d.Point;
@@ -7,6 +8,7 @@ import pl.cbr.games.snake.geom2d.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class PlayerModel {
     private int length;
     private final List<Point> view;
@@ -57,10 +59,6 @@ public class PlayerModel {
 
     public void addLength(int value) {
         length += value;
-    }
-
-    public int getLength() {
-        return length;
     }
 
     public Point get(int z) {

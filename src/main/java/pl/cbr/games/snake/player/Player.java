@@ -1,7 +1,7 @@
 package pl.cbr.games.snake.player;
 
 import lombok.Data;
-import pl.cbr.games.snake.Board;
+import pl.cbr.games.snake.Drawing;
 import pl.cbr.games.snake.GameResources;
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.config.PlayerConfig;
@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 @Data
-public class Player {
+public class Player implements Drawing {
 
     private final GameConfig gameConfig;
     private PlayerConfig playerConfig;
@@ -53,18 +53,19 @@ public class Player {
         return getPlayerState().isInGame();
     }
 
-    public void doDrawing(Graphics g, Board board) {
+    public void keyPressed(KeyEvent e) {
+        getPlayerState().keyPressed(e);
+    }
+
+    @Override
+    public void doDrawing(Graphics g) {
         for (int z = 0; z < getPlayerModel().getViewSize(); z++) {
             Point point = getPlayerModel().get(z).multiply(gameConfig.getDotSize());
             if (z == 0) {
-                g.drawImage(GameResources.getHead(),  point.getX(), point.getY(), board);
+                g.drawImage(GameResources.getHead(),  point.getX(), point.getY(), null);
             } else {
-                g.drawImage(GameResources.getBall(getId()%2), point.getX(), point.getY(), board);
+                g.drawImage(GameResources.getBall(getId()%2), point.getX(), point.getY(), null);
             }
         }
-    }
-
-    public void keyPressed(KeyEvent e) {
-        getPlayerState().keyPressed(e);
     }
 }
