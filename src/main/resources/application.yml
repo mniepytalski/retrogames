@@ -1,0 +1,29 @@
+game:
+  width: 600
+  height: 400
+  dot-size: 10
+  dots-on-start: 3
+
+  players:
+    - name: Mario1
+      position:
+        x: 5
+        y: 5
+      control:
+        left: VK_LEFT
+        right: VK_RIGHT
+        up: VK_UP
+        down: VK_DOWN
+#    - name: Michal
+#      position:
+#        x: 20
+#        y: 20
+#      control:
+#        left: VK_A
+#        right: VK_D
+#        up: VK_W
+#        down: VK_S
+
+messages:
+  title: SnAkE
+  end-game: Koniec gry

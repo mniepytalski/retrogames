@@ -1,6 +1,10 @@
 package pl.cbr.games.snake.player;
 
 import lombok.Data;
+import pl.cbr.games.snake.config.ControlConfig;
+import pl.cbr.games.snake.config.control.PlayerConfigMapper;
+import pl.cbr.games.snake.config.control.PlayerControlConfiguration;
+
 import java.awt.event.KeyEvent;
 
 @Data
@@ -9,11 +13,13 @@ public class PlayerState {
     private MoveDirection direction;
     private boolean inGame = true;
 
-    private final PlayerControlConfiguration playerControlConfiguration;
+    private PlayerControlConfiguration playerControlConfiguration;
 
-    public PlayerState(PlayerControlConfiguration playerControlConfiguration) {
+    public PlayerState(ControlConfig controlConfig) {
         this.direction = MoveDirection.RIGHT;
-        this.playerControlConfiguration = playerControlConfiguration;
+
+        PlayerConfigMapper playerConfigMapper = new PlayerConfigMapper();
+        this.playerControlConfiguration = playerConfigMapper.map(controlConfig);
     }
 
     void keyPressed(KeyEvent e) {

@@ -21,7 +21,7 @@ public class PlayerModel {
 
     public void initPlayer(Point startPosition) {
         view.clear();
-        this.length = gameConfig.getStartLength();
+        this.length = gameConfig.getDotsOnStart();
         initPlayerView(startPosition);
     }
 

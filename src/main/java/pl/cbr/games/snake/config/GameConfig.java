@@ -1,41 +1,19 @@
 package pl.cbr.games.snake.config;
 
 import lombok.Data;
-import pl.cbr.system.config.ConfigFile;
-import pl.cbr.system.config.ConfigInterface;
-import pl.cbr.system.config.ConfigKey;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-@ConfigFile("game.properties")
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
-public class GameConfig implements ConfigInterface {
-
-    @ConfigKey("board.width")
-    int width;
-
-    @ConfigKey("board.height")
-    int height;
-
-    @ConfigKey("board.dot-size")
-    int dotSize;
-
-    @ConfigKey("board.dots-on-start")
-    int startLength;
-
-    @ConfigKey("players.1.name")
-    String player1Name;
-
-    @ConfigKey("players.1.position.x")
-    int player1PositionX;
-
-    @ConfigKey("players.1.position.y")
-    int player1PositionY;
-
-    @ConfigKey("players.2.name")
-    String player2Name;
-
-    @ConfigKey("players.2.position.x")
-    int player2PositionX;
-
-    @ConfigKey("players.2.position.y")
-    int player2PositionY;
+@Configuration
+@ConfigurationProperties(prefix = "game")
+public class GameConfig {
+    private int width;
+    private int height;
+    private int dotSize;
+    private int dotsOnStart;
+    private List<PlayerConfig> players = new ArrayList<>();
 }

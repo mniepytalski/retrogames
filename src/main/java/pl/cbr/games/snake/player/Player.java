@@ -4,6 +4,7 @@ import lombok.Data;
 import pl.cbr.games.snake.Board;
 import pl.cbr.games.snake.GameResources;
 import pl.cbr.games.snake.config.GameConfig;
+import pl.cbr.games.snake.config.PlayerConfig;
 import pl.cbr.games.snake.geom2d.Point;
 import pl.cbr.games.snake.geom2d.Rectangle;
 
@@ -13,30 +14,27 @@ import java.awt.event.KeyEvent;
 @Data
 public class Player {
 
+    private final GameConfig gameConfig;
+    private PlayerConfig playerConfig;
+
 	private int id;
-    private String name;
-    private final Point startPosition;
-    private PlayerControlConfiguration playerControlConfiguration;
     private PlayerState playerState;
     private PlayerModel playerModel;
-    private final GameConfig gameConfig;
 
     private int points;
 
     private static int idGenerator = 1;
 
-    public Player(String name, Point startPosition, PlayerControlConfiguration playerControlConfiguration, GameConfig gameConfig) {
+    public Player(PlayerConfig playerConfig, GameConfig gameConfig) {
         this.id = idGenerator++;
-    	this.name = name;
-        this.startPosition = startPosition;
         this.gameConfig = gameConfig;
-        this.playerControlConfiguration = playerControlConfiguration;
-        playerState = new PlayerState(playerControlConfiguration);
+        this.playerConfig = playerConfig;
+        playerState = new PlayerState(playerConfig.getControl());
         playerModel = new PlayerModel(gameConfig);
     }
 
     public void initGame() {
-        playerModel.initPlayer(startPosition);
+        playerModel.initPlayer(playerConfig.getPosition().getPoint());
     }
 
     public void move() {
@@ -48,7 +46,6 @@ public class Player {
             getPlayerState().setInGame(false);
             return true;
         }
-
         Rectangle boardRectangle = new Rectangle(new Point(0,0),
                 (new Point(gameConfig.getWidth(),gameConfig.getHeight())).division(gameConfig.getDotSize()));
         getPlayerState().setInGame(!getPlayerModel().isOutside(boardRectangle));

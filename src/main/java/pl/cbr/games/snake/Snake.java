@@ -1,39 +1,36 @@
 package pl.cbr.games.snake;
 
-import lombok.Getter;
-import pl.cbr.games.snake.config.GameConfig;
-import pl.cbr.games.snake.config.MessagesConfig;
-import pl.cbr.system.ApplicationContext;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 
-@Getter
+@SpringBootApplication
 public class Snake extends JFrame {
 
-    public Snake(GameConfig gameConfig, MessagesConfig messagesConfig) {
-        initUI(gameConfig, messagesConfig);
+    private final Board board;
+
+    public Snake(Board board) {
+        this.board = board;
+        initUI();
     }
 
-    private void initUI(GameConfig gameConfig, MessagesConfig messagesConfig) {
-        add(new Board(this, gameConfig, messagesConfig));
-
+    private void initUI() {
+        add(board);
         setResizable(false);
         pack();
-
-        setTitle(messagesConfig.getTitle());
+        setTitle("Title");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     public static void main(String[] args) {
-        ApplicationContext applicationContext = ApplicationContext.getInstance("pl.cbr");
-        GameConfig gameConfig = (GameConfig)applicationContext
-                .getConfiguration("pl.cbr.games.snake.config.GameConfig");
-        MessagesConfig messagesConfig = (MessagesConfig)applicationContext
-                .getConfiguration("pl.cbr.games.snake.config.MessagesConfig");
-
-        Snake app = new Snake(gameConfig, messagesConfig);
-        EventQueue.invokeLater(() -> app.setVisible(true));
+        var ctx = new SpringApplicationBuilder(Snake.class)
+                .headless(false).run(args);
+        EventQueue.invokeLater(() -> {
+            var ex = ctx.getBean(Snake.class);
+            ex.setVisible(true);
+        });
     }
 }

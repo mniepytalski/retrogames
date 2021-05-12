@@ -1,10 +1,11 @@
 package pl.cbr.games.snake;
 
+import org.springframework.stereotype.Component;
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.config.MessagesConfig;
+import pl.cbr.games.snake.config.PlayerConfig;
 import pl.cbr.games.snake.geom2d.Point;
 import pl.cbr.games.snake.player.Player;
-import pl.cbr.games.snake.player.PlayerControlConfiguration;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,11 +22,11 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+@Component
 public class Board extends JPanel implements ActionListener {
 
-    private final transient GameConfig gameConfig;
-    private final transient MessagesConfig messages;
-    Snake snake;
+    private final GameConfig gameConfig;
+    private final MessagesConfig messages;
 
     private Timer timer;
 
@@ -33,29 +34,18 @@ public class Board extends JPanel implements ActionListener {
     private final transient List<Player> players;
     private GameStatus gameStatus = GameStatus.RUNNING;
 
+
     private final static int DELAY = 250;
 
-    public Board(Snake snake, GameConfig gameConfig, MessagesConfig messages) {
+    public Board(GameConfig gameConfig, MessagesConfig messages ) {
         this.gameConfig = gameConfig;
         this.messages = messages;
-        BoardModel boardModel = new BoardModel(gameConfig);
         players = new ArrayList<>();
-        apple = new Apple(boardModel);
-        this.snake = snake;
-
-        PlayerControlConfiguration playerControlConfiguration1 = new PlayerControlConfiguration(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT
-                , KeyEvent.VK_UP, KeyEvent.VK_DOWN);
-        Player player1 = new Player(gameConfig.getPlayer1Name(), new Point(gameConfig.getPlayer1PositionX(),
-                gameConfig.getPlayer1PositionY()), playerControlConfiguration1, gameConfig);
-
-        PlayerControlConfiguration playerControlConfiguration2 = new PlayerControlConfiguration(KeyEvent.VK_A, KeyEvent.VK_D
-                , KeyEvent.VK_W, KeyEvent.VK_S);
-        Player player2 = new Player(gameConfig.getPlayer2Name(), new Point(gameConfig.getPlayer2PositionX(),
-                gameConfig.getPlayer2PositionY()), playerControlConfiguration2, gameConfig);
-
-        players.add(player1);
- //       players.add(player2);
-
+        apple = new Apple(new BoardModel(gameConfig));
+        for (PlayerConfig playerConfig: this.gameConfig.getPlayers()) {
+            Player player = new Player(playerConfig, gameConfig);
+            players.add(player);
+        }
         initBoard();
     }
 
@@ -78,7 +68,6 @@ public class Board extends JPanel implements ActionListener {
     private void stopGame() {
         gameStatus = GameStatus.STOP;
         timer.stop();
-        snake.setTitle("XoXoXoX");
     }
 
     @Override
