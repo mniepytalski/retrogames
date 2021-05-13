@@ -15,5 +15,6 @@ public class GameConfig {
     private int height;
     private int dotSize;
     private int dotsOnStart;
+    private boolean lattice;
     private List<PlayerConfig> players = new ArrayList<>();
 }

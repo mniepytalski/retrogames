@@ -16,6 +16,7 @@ public class Player implements Drawing {
 
     private final GameConfig gameConfig;
     private PlayerConfig playerConfig;
+    private final GameResources gameResources;
 
 	private int id;
     private PlayerState playerState;
@@ -25,10 +26,11 @@ public class Player implements Drawing {
 
     private static int idGenerator = 1;
 
-    public Player(PlayerConfig playerConfig, GameConfig gameConfig) {
+    public Player(PlayerConfig playerConfig, GameConfig gameConfig, GameResources gameResources) {
         this.id = idGenerator++;
         this.gameConfig = gameConfig;
         this.playerConfig = playerConfig;
+        this.gameResources = gameResources;
         playerState = new PlayerState(playerConfig.getControl());
         playerModel = new PlayerModel(gameConfig);
     }
@@ -62,9 +64,9 @@ public class Player implements Drawing {
         for (int z = 0; z < getPlayerModel().getViewSize(); z++) {
             Point point = getPlayerModel().get(z).multiply(gameConfig.getDotSize());
             if (z == 0) {
-                g.drawImage(GameResources.getHead(),  point.getX(), point.getY(), null);
+                g.drawImage(gameResources.getHead(),  point.getX(), point.getY(), null);
             } else {
-                g.drawImage(GameResources.getBall(getId()%2), point.getX(), point.getY(), null);
+                g.drawImage(gameResources.getBall(getId()%2), point.getX(), point.getY(), null);
             }
         }
     }

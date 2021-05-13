@@ -1,0 +1,5 @@
+game:
+  dot-size: 20
+
+resources:
+  apple: Red_Apple.png

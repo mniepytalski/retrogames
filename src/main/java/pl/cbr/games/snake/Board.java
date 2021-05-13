@@ -37,16 +37,16 @@ public class Board extends JPanel implements ActionListener, Drawing {
 
     private final static int DELAY = 200;
 
-    public Board(GameConfig gameConfig, MessagesConfig messages ) {
+    public Board(GameConfig gameConfig, MessagesConfig messages, GameResources gameResources) {
         this.gameConfig = gameConfig;
         this.messages = messages;
         players = new ArrayList<>();
         for (PlayerConfig playerConfig: this.gameConfig.getPlayers()) {
-            Player player = new Player(playerConfig, gameConfig);
+            Player player = new Player(playerConfig, gameConfig, gameResources);
             players.add(player);
             drawingList.add(player);
         }
-        apple = new Apple(gameConfig);;
+        apple = new Apple(gameConfig, gameResources);
         drawingList.add(apple);
         initBoard();
     }
@@ -55,8 +55,10 @@ public class Board extends JPanel implements ActionListener, Drawing {
         addKeyListener(new TAdapter());
         setBackground(Color.black);
         setFocusable(true);
+        Dimension dimension = new Dimension(gameConfig.getWidth(), gameConfig.getHeight());
+        setPreferredSize(dimension);
 
-        setPreferredSize(new Dimension(gameConfig.getWidth(), gameConfig.getHeight()));
+
         initGame();
     }
 
@@ -86,11 +88,24 @@ public class Board extends JPanel implements ActionListener, Drawing {
 
         if ( gameStatus.equals(GameStatus.RUNNING)) {
             drawingList.forEach( objectToDraw -> objectToDraw.doDrawing(g));
+            if ( gameConfig.isLattice()) {
+                drawLattice(g);
+            }
         }
         if ( gameStatus.equals(GameStatus.STOP)) {
             gameOver(g);
         }
         Toolkit.getDefaultToolkit().sync();
+    }
+
+    private void drawLattice(Graphics g) {
+        g.setColor(Color.GRAY);
+        for ( int x=gameConfig.getDotSize(); x<=gameConfig.getWidth(); x+=gameConfig.getDotSize()) {
+            g.drawLine(x, 0, x, gameConfig.getHeight());
+        }
+        for ( int y=gameConfig.getDotSize(); y<=gameConfig.getHeight(); y+=gameConfig.getDotSize()) {
+            g.drawLine(0, y, gameConfig.getWidth(), y);
+        }
     }
 
     private void gameOver(Graphics g) {

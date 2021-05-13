@@ -1,8 +1,13 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+
 game:
   width: 600
   height: 400
   dot-size: 10
   dots-on-start: 3
+  lattice: false
 
   players:
     - name: Mario1
@@ -27,3 +32,9 @@ game:
 messages:
   title: SnAkE
   end-game: Koniec gry
+
+resources:
+  ball0: dot0.png
+  ball1: dot1.png
+  apple: apple.png
+  head: head.png

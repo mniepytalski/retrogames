@@ -1,7 +1,7 @@
 package pl.cbr.games.snake;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+import pl.cbr.games.snake.config.ResourcesConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,55 +9,54 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class GameResources {
 
-    private static volatile Map<String, Image> resources = null;
+    private Map<String, Image> resources;
+    private final ResourcesConfig resourcesConfig;
 
-    public static Map<String, Image> getResources() {
-        if (resources == null) {
-            synchronized(GameResources.class) {
-                if (resources == null) {
-                    resources = new HashMap<>();
-                    loadImages();
-                }
-            }
-        }
-        return resources;
+    public GameResources(ResourcesConfig resourcesConfig) {
+        this.resourcesConfig = resourcesConfig;
+        resources = new HashMap<>();
+        loadImages();
     }
 
-    private static void loadImages() {
+    private void loadImages() {
 
         Class cls;
         try {
             cls = Class.forName("pl.cbr.games.snake.GameResources");
             ClassLoader cLoader = cls.getClassLoader();
 
-            ImageIcon iid0 = new ImageIcon(Objects.requireNonNull(cLoader.getResource("images/dot0.png")));
-            getResources().put("ball0", iid0.getImage());
+            ImageIcon iid0 = new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource("images/"+resourcesConfig.getBall0())));
+            resources.put("ball0", iid0.getImage());
 
-            ImageIcon iid1 = new ImageIcon(Objects.requireNonNull(cLoader.getResource("images/dot1.png")));
-            getResources().put("ball1", iid1.getImage());
+            ImageIcon iid1 = new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource("images/"+resourcesConfig.getBall1())));
+            resources.put("ball1", iid1.getImage());
 
-            ImageIcon iia = new ImageIcon(Objects.requireNonNull(cLoader.getResource("images/apple.png")));
-            getResources().put("apple", iia.getImage());
+            ImageIcon iia = new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource("images/"+resourcesConfig.getApple())));
+            resources.put("apple", iia.getImage());
 
-            ImageIcon iih = new ImageIcon(Objects.requireNonNull(cLoader.getResource("images/head.png")));
-            getResources().put("head", iih.getImage());
+            ImageIcon iih = new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource("images/"+resourcesConfig.getHead())));
+            resources.put("head", iih.getImage());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static Image getBall(int i) {
-        return getResources().get("ball"+i);
+    public Image getBall(int i) {
+        return resources.get("ball"+i);
     }
 
-    public static Image getApple() {
-        return getResources().get("apple");
+    public Image getApple() {
+        return resources.get("apple");
     }
 
-    public static Image getHead() {
-        return getResources().get("head");
+    public Image getHead() {
+        return resources.get("head");
     }
 }
