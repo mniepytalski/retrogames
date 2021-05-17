@@ -39,3 +39,4 @@ resources:
   ball1: dot1.png
   apple: apple.png
   head: head.png
+  wall: wall.png

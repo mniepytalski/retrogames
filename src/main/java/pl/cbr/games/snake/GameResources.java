@@ -43,6 +43,9 @@ public class GameResources {
             ImageIcon iih = new ImageIcon(Objects.requireNonNull(
                     cLoader.getResource("images/"+resourcesConfig.getHead())));
             resources.put("head", iih.getImage());
+
+            resources.put("wall",(new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource("images/"+resourcesConfig.getWall())))).getImage());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -58,5 +61,8 @@ public class GameResources {
 
     public Image getHead() {
         return resources.get("head");
+    }
+    public Image getWall() {
+        return resources.get("wall");
     }
 }

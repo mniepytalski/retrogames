@@ -12,4 +12,5 @@ public class ResourcesConfig {
     private String ball1;
     private String apple;
     private String head;
+    private String wall;
 }

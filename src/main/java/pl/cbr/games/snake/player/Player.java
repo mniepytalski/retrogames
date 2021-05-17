@@ -46,13 +46,13 @@ public class Player implements Drawing {
     public boolean checkCollision() {
         if ( getPlayerModel().checkOurselfCollision() ) {
             getPlayerState().setInGame(false);
-            return true;
+            return false;
         }
         Rectangle boardRectangle = new Rectangle(new Point(0,0),
                 (new Point(gameConfig.getWidth(),gameConfig.getHeight())).division(gameConfig.getDotSize()));
         getPlayerState().setInGame(!getPlayerModel().isOutside(boardRectangle));
 
-        return getPlayerState().isInGame();
+        return !getPlayerState().isInGame();
     }
 
     public void keyPressed(KeyEvent e) {
