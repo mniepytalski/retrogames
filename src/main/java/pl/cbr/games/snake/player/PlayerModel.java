@@ -36,6 +36,7 @@ public class PlayerModel {
     public void move(MoveDirection direction) {
         addHaed(getHead().add(directionService.getVector(direction)));
         limitTail();
+        limitTail();
     }
 
     private void limitTail() {
@@ -59,6 +60,10 @@ public class PlayerModel {
 
     public void addLength(int value) {
         length += value;
+    }
+
+    public void setLength(int value) {
+        this.length = value;
     }
 
     public Point get(int z) {

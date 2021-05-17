@@ -6,6 +6,7 @@ import pl.cbr.games.snake.Drawing;
 import pl.cbr.games.snake.GameResources;
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.geom2d.Point;
+import pl.cbr.games.snake.player.PlayerModel;
 
 @Data
 public abstract class BoardObject implements Drawing {
@@ -29,5 +30,11 @@ public abstract class BoardObject implements Drawing {
 
     public void setPosition(Point position) {
         this.position = position;
+    }
+
+    public abstract boolean isEndGame();
+
+    public void action(PlayerModel playerModel) {
+
     }
 }

@@ -13,4 +13,5 @@ public class ResourcesConfig {
     private String apple;
     private String head;
     private String wall;
+    private String lemon;
 }
