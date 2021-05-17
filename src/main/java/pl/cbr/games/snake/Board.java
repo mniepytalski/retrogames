@@ -18,6 +18,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -29,7 +30,7 @@ public class Board extends JPanel implements ActionListener, Drawing {
 
     private Timer timer;
 
-    private final transient Apple apple;
+    private final transient List<Apple> apples;
     private final transient List<Player> players;
     private GameStatus gameStatus = GameStatus.RUNNING;
 
@@ -41,13 +42,11 @@ public class Board extends JPanel implements ActionListener, Drawing {
         this.gameConfig = gameConfig;
         this.messages = messages;
         players = new ArrayList<>();
-        for (PlayerConfig playerConfig: this.gameConfig.getPlayers()) {
-            Player player = new Player(playerConfig, gameConfig, gameResources);
-            players.add(player);
-            drawingList.add(player);
-        }
-        apple = new Apple(gameConfig, gameResources);
-        drawingList.add(apple);
+        this.gameConfig.getPlayers().forEach(playerConfig -> players.add(new Player(playerConfig, gameConfig, gameResources)));
+        players.forEach(player -> drawingList.add(player));
+        apples = new ArrayList<>();
+        IntStream.iterate(1, i -> i++).limit(gameConfig.getApples()).forEach(n -> apples.add(new Apple(gameConfig, gameResources)));
+        apples.forEach(apple -> drawingList.add(apple));
         initBoard();
     }
 
@@ -57,14 +56,12 @@ public class Board extends JPanel implements ActionListener, Drawing {
         setFocusable(true);
         Dimension dimension = new Dimension(gameConfig.getWidth(), gameConfig.getHeight());
         setPreferredSize(dimension);
-
-
         initGame();
     }
 
     private void initGame() {
         players.forEach(Player::initGame);
-        apple.setRandomPosition();
+        apples.forEach(Apple::setRandomPosition);
         timer = new Timer(DELAY, this);
         timer.start();
     }
@@ -122,10 +119,13 @@ public class Board extends JPanel implements ActionListener, Drawing {
     }
 
     private void checkApple(Player player) {
-        if ( player.getPlayerModel().get(0).equals(apple.getPosition())) {
-            player.getPlayerModel().addLength(5);
-            apple.setRandomPosition();
-        }
+        apples.forEach(apple -> {
+                    if (player.getPlayerModel().get(0).equals(apple.getPosition())) {
+                        player.getPlayerModel().addLength(5);
+                        apple.setRandomPosition();
+                    }
+                }
+        );
     }
 
     @Override

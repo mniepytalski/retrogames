@@ -22,8 +22,6 @@ public class PlayerControlTool {
                 }
             }
         }
-        log.info("config mapper load {}",controlKeys.size());
-
     }
 
     public Integer getCode(String keyName) {
