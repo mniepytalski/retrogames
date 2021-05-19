@@ -19,9 +19,8 @@ public class Wall extends BoardObject implements Drawing {
         g.drawImage(gameResources.getWall(), applePosition.getX(), applePosition.getY(), null);
     }
 
+    @Override
     public boolean isEndGame() {
         return true;
     }
-
-
 }

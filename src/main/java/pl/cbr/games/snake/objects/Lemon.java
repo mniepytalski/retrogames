@@ -20,10 +20,12 @@ public class Lemon extends BoardObject implements Drawing {
         g.drawImage(gameResources.getLemon(), applePosition.getX(), applePosition.getY(), null);
     }
 
+    @Override
     public boolean isEndGame() {
         return false;
     }
 
+    @Override
     public void action(PlayerModel playerModel) {
         playerModel.setLength(4);
         setRandomPosition();

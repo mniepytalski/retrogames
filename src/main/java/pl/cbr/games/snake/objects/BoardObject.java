@@ -16,8 +16,8 @@ public abstract class BoardObject implements Drawing {
     final GameConfig gameConfig;
     final GameResources gameResources;
 
-    public BoardObject(GameConfig gameConfig, GameResources gameResources) {
-        this.boardModel = new BoardModel(gameConfig);
+    protected BoardObject(GameConfig gameConfig, GameResources gameResources) {
+        this.boardModel = new BoardModel(gameConfig, gameResources);
         this.gameConfig = gameConfig;
         this.gameResources = gameResources;
         this.position = new Point(0,0);
@@ -26,10 +26,6 @@ public abstract class BoardObject implements Drawing {
     public void setRandomPosition() {
         position.setX((int) (Math.random() * boardModel.getBoard().getRightBottom().getX()) );
         position.setY((int) (Math.random() * boardModel.getBoard().getRightBottom().getY()) );
-    }
-
-    public void setPosition(Point position) {
-        this.position = position;
     }
 
     public abstract boolean isEndGame();

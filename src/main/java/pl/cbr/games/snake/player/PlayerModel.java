@@ -14,6 +14,7 @@ public class PlayerModel {
     private final List<Point> view;
     private final GameConfig gameConfig;
     private final DirectionService directionService;
+    private int points;
 
     public PlayerModel(GameConfig gameConfig) {
         view = new ArrayList<>();
@@ -31,10 +32,11 @@ public class PlayerModel {
         for (int z = 0; z < getLength(); z++) {
             view.add((new Point(startPosition.getX() - z, startPosition.getY())));
         }
+        points = 0;
     }
 
     public void move(MoveDirection direction) {
-        addHaed(getHead().add(directionService.getVector(direction)));
+        addHead(getHead().add(directionService.getVector(direction)));
         limitTail();
         limitTail();
     }
@@ -60,6 +62,7 @@ public class PlayerModel {
 
     public void addLength(int value) {
         length += value;
+        points += value;
     }
 
     public void setLength(int value) {
@@ -74,12 +77,7 @@ public class PlayerModel {
         return view.get(0);
     }
 
-    public void set(int z, Point point) {
-        view.get(z).set(point);
-    }
-
-    private void addHaed(Point point) {
+    private void addHead(Point point) {
         view.add(0,point);
     }
-
 }

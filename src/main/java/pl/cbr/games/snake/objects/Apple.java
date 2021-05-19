@@ -20,10 +20,12 @@ public class Apple extends BoardObject implements Drawing {
         g.drawImage(gameResources.getApple(), applePosition.getX(), applePosition.getY(), null);
     }
 
+    @Override
     public boolean isEndGame() {
         return false;
     }
 
+    @Override
     public void action(PlayerModel playerModel) {
         playerModel.addLength(5);
         setRandomPosition();

@@ -10,11 +10,11 @@ import javax.swing.JFrame;
 @SpringBootApplication
 public class Snake extends JFrame {
 
-    private final MessagesConfig messagess;
+    private final transient MessagesConfig messages;
     private final Board board;
 
-    public Snake(MessagesConfig messagess, Board board) {
-        this.messagess = messagess;
+    public Snake(MessagesConfig messages, Board board) {
+        this.messages = messages;
         this.board = board;
         initUI();
     }
@@ -23,7 +23,7 @@ public class Snake extends JFrame {
         add(board);
         setResizable(false);
         pack();
-        setTitle(messagess.getTitle());
+        setTitle(messages.getTitle());
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }

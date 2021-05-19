@@ -1,15 +1,14 @@
 package pl.cbr.games.snake.player;
 
 import pl.cbr.games.snake.geom2d.Point;
-
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class DirectionService {
     private final Map<MoveDirection, Point> directions;
 
     public DirectionService() {
-        directions = new HashMap<>();
+        directions = new EnumMap<>(MoveDirection.class);
         prepareDirectionMap();
     }
 

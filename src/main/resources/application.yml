@@ -32,7 +32,7 @@ game:
 
 messages:
   title: SnAkE
-  end-game: Koniec gry
+  end-game: Game Over, restart press R
 
 resources:
   ball0: dot0.png

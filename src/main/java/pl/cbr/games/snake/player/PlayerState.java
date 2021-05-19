@@ -16,10 +16,14 @@ public class PlayerState {
     private PlayerControlConfiguration playerControlConfiguration;
 
     public PlayerState(ControlConfig controlConfig) {
-        this.direction = MoveDirection.RIGHT;
-
         PlayerConfigMapper playerConfigMapper = new PlayerConfigMapper();
         this.playerControlConfiguration = playerConfigMapper.map(controlConfig);
+        initState();
+    }
+
+    public void initState() {
+        direction = MoveDirection.RIGHT;
+        inGame = true;
     }
 
     void keyPressed(KeyEvent e) {

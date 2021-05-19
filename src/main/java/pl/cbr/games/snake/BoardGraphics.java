@@ -26,7 +26,7 @@ public class BoardGraphics {
     }
 
     public void gameOver(Graphics g, JPanel jPanel) {
-        Font small = new Font("Helvetica", Font.BOLD, 14);
+        Font small = new Font("Courier", Font.BOLD, 24);
         FontMetrics fontMetrics = jPanel.getFontMetrics(small);
 
         g.setColor(Color.white);
@@ -34,7 +34,16 @@ public class BoardGraphics {
         g.drawString(messages.getEndGame(),
                 (gameConfig.getWidth() - fontMetrics.stringWidth(messages.getEndGame())) / 2,
                 gameConfig.getHeight() / 2);
+    }
 
-        g.drawString(messages.getEndGame(), 40, 40);
+    public void gamePaused(Graphics g, JPanel jPanel) {
+        Font small = new Font("Courier", Font.BOLD, 24);
+        FontMetrics fontMetrics = jPanel.getFontMetrics(small);
+
+        g.setColor(Color.cyan);
+        g.setFont(small);
+        g.drawString("Paused",
+                (gameConfig.getWidth() - fontMetrics.stringWidth(messages.getEndGame())) / 2,
+                gameConfig.getHeight() / 2);
     }
 }

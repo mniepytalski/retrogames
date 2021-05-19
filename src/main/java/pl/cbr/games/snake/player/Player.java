@@ -35,8 +35,9 @@ public class Player implements Drawing {
         playerModel = new PlayerModel(gameConfig);
     }
 
-    public void initGame() {
+    public void initPlayer() {
         playerModel.initPlayer(playerConfig.getPosition().getPoint());
+        playerState.initState();
     }
 
     public void move() {
@@ -50,8 +51,10 @@ public class Player implements Drawing {
         }
         Rectangle boardRectangle = new Rectangle(new Point(0,0),
                 (new Point(gameConfig.getWidth(),gameConfig.getHeight())).division(gameConfig.getDotSize()));
-        getPlayerState().setInGame(!getPlayerModel().isOutside(boardRectangle));
-
+        if (getPlayerModel().isOutside(boardRectangle)) {
+            getPlayerState().setInGame(false);
+            return false;
+        }
         return !getPlayerState().isInGame();
     }
 
@@ -69,5 +72,12 @@ public class Player implements Drawing {
                 g.drawImage(gameResources.getBall(getId()%2), point.getX(), point.getY(), null);
             }
         }
+        g.setColor(Color.LIGHT_GRAY);
+        int pointsFromModel = 0;
+        if (playerModel!=null) {
+            pointsFromModel = playerModel.getPoints();
+        }
+
+        g.drawString(playerConfig.getName()+": "+pointsFromModel,14*id,10);
     }
 }
