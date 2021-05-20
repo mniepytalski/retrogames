@@ -25,6 +25,14 @@ public class BoardGraphics {
         }
     }
 
+    public void init(Board board) {
+        board.addKeyListener(new BoardKeyAdapter(board));
+        board.setBackground(Color.black);
+        board.setFocusable(true);
+        Dimension dimension = new Dimension(gameConfig.getWidth(), gameConfig.getHeight());
+        board.setPreferredSize(dimension);
+    }
+
     public void gameOver(Graphics g, JPanel jPanel) {
         Font small = new Font("Courier", Font.BOLD, 24);
         FontMetrics fontMetrics = jPanel.getFontMetrics(small);

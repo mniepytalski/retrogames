@@ -1,5 +1,7 @@
 package pl.cbr.games.snake.objects;
 
+import lombok.extern.slf4j.Slf4j;
+import pl.cbr.games.snake.BoardModel;
 import pl.cbr.games.snake.Drawing;
 import pl.cbr.games.snake.GameResources;
 import pl.cbr.games.snake.config.GameConfig;
@@ -8,10 +10,11 @@ import pl.cbr.games.snake.player.PlayerModel;
 
 import java.awt.*;
 
+@Slf4j
 public class Apple extends BoardObject implements Drawing {
 
-    public Apple(GameConfig gameConfig, GameResources gameResources) {
-        super(gameConfig, gameResources);
+    public Apple(GameConfig gameConfig, GameResources gameResources, BoardModel boardModel) {
+        super(gameConfig, gameResources, boardModel);
     }
 
     @Override
@@ -28,6 +31,6 @@ public class Apple extends BoardObject implements Drawing {
     @Override
     public void action(PlayerModel playerModel) {
         playerModel.addLength(5);
-        setRandomPosition();
+        super.action(playerModel);
     }
 }

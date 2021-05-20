@@ -16,8 +16,8 @@ public abstract class BoardObject implements Drawing {
     final GameConfig gameConfig;
     final GameResources gameResources;
 
-    protected BoardObject(GameConfig gameConfig, GameResources gameResources) {
-        this.boardModel = new BoardModel(gameConfig, gameResources);
+    protected BoardObject(GameConfig gameConfig, GameResources gameResources, BoardModel boardModel) {
+        this.boardModel = boardModel;
         this.gameConfig = gameConfig;
         this.gameResources = gameResources;
         this.position = new Point(0,0);
@@ -31,6 +31,11 @@ public abstract class BoardObject implements Drawing {
     public abstract boolean isEndGame();
 
     public void action(PlayerModel playerModel) {
-
+        for ( int i=0; i<100; i++ ) {
+            setRandomPosition();
+            if (!boardModel.collisionWithPoint()) {
+                break;
+            }
+        }
     }
 }
