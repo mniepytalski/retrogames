@@ -87,7 +87,6 @@ public class Board extends JPanel implements ActionListener, Drawing {
             gameStatus = GameStatus.STOP;
         }
         if ( gameStatus == GameStatus.RUNNING ) {
-
             boardModel.getObjects().forEach(objectToDraw -> objectToDraw.doDrawing(g));
             boardModel.getPlayers().forEach( objectToDraw -> objectToDraw.doDrawing(g));
             if ( gameConfig.isLattice()) {
