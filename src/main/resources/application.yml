@@ -20,15 +20,15 @@ game:
         right: VK_RIGHT
         up: VK_UP
         down: VK_DOWN
-#    - name: Michal
-#      position:
-#        x: 20
-#        y: 20
-#      control:
-#        left: VK_A
-#        right: VK_D
-#        up: VK_W
-#        down: VK_S
+    - name: Michal
+      position:
+        x: 2
+        y: 2
+      control:
+        left: VK_A
+        right: VK_D
+        up: VK_W
+        down: VK_S
 
 messages:
   title: SnAkE
