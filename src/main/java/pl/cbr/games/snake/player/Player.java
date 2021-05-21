@@ -78,6 +78,6 @@ public class Player implements Drawing {
             pointsFromModel = playerModel.getPoints();
         }
 
-        g.drawString(playerConfig.getName()+": "+pointsFromModel,14*id,10);
+        g.drawString(playerConfig.getName()+": "+pointsFromModel,10,14*id);
     }
 }

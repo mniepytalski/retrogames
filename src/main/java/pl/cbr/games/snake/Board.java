@@ -87,11 +87,14 @@ public class Board extends JPanel implements ActionListener, Drawing {
             gameStatus = GameStatus.STOP;
         }
         if ( gameStatus == GameStatus.RUNNING ) {
-            boardModel.getPlayers().forEach( objectToDraw -> objectToDraw.doDrawing(g));
+
             boardModel.getObjects().forEach(objectToDraw -> objectToDraw.doDrawing(g));
+            boardModel.getPlayers().forEach( objectToDraw -> objectToDraw.doDrawing(g));
             if ( gameConfig.isLattice()) {
                 boardGraphics.drawLattice(g);
             }
+            g.setColor(Color.LIGHT_GRAY);
+            g.drawString("Level "+levelScenarios.getActualLevel(), 80, 14);
         }
         if ( gameStatus == GameStatus.STOP ) {
             boardGraphics.gameOver(g,this);
