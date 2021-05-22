@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.config.MessagesConfig;
 
-import javax.swing.*;
 import java.awt.*;
 
 @Component
@@ -14,6 +13,8 @@ public class BoardGraphics {
 
     private final GameConfig gameConfig;
     private final MessagesConfig messages;
+
+    private static final String FONT_TYPE = "Courier";
 
     public void drawLattice(Graphics g) {
         g.setColor(Color.GRAY);
@@ -33,9 +34,35 @@ public class BoardGraphics {
         board.setPreferredSize(dimension);
     }
 
-    public void gameOver(Graphics g, JPanel jPanel) {
-        Font small = new Font("Courier", Font.BOLD, 24);
-        FontMetrics fontMetrics = jPanel.getFontMetrics(small);
+    public void printBoard(GameStatus gameStatus, Graphics g, Board board) {
+        if ( gameStatus == GameStatus.NEXT_LEVEL ) {
+            nextLevel(g,board);
+        }
+        if ( gameStatus == GameStatus.RUNNING ) {
+            printRunningBoard(g,board);
+        }
+        if ( gameStatus == GameStatus.STOP ) {
+            gameOver(g,board);
+        }
+        if ( gameStatus == GameStatus.PAUSED) {
+            gamePaused(g,board);
+        }
+    }
+
+    private void printRunningBoard(Graphics g, Board board) {
+        board.getBoardModel().getObjects().forEach(objectToDraw -> objectToDraw.doDrawing(g));
+        board.getBoardModel().getPlayers().forEach( objectToDraw -> objectToDraw.doDrawing(g));
+        if ( gameConfig.isLattice()) {
+            drawLattice(g);
+        }
+        g.setColor(Color.LIGHT_GRAY);
+        g.drawString("Level "+(board.getLevelScenarios().getActualLevel()+1), 80, 14);
+        g.drawString("All points "+(board.getLevelScenarios().getLevel().getPointsToFinish()), 140, 14);
+    }
+
+    private void gameOver(Graphics g, Board board) {
+        Font small = new Font(FONT_TYPE, Font.BOLD, 24);
+        FontMetrics fontMetrics = board.getFontMetrics(small);
 
         g.setColor(Color.white);
         g.setFont(small);
@@ -44,9 +71,26 @@ public class BoardGraphics {
                 gameConfig.getHeight() / 2);
     }
 
-    public void gamePaused(Graphics g, JPanel jPanel) {
-        Font small = new Font("Courier", Font.BOLD, 24);
-        FontMetrics fontMetrics = jPanel.getFontMetrics(small);
+    private void nextLevel(Graphics g, Board board) {
+        printRunningBoard(g, board);
+
+        Font small = new Font(FONT_TYPE, Font.BOLD, 24);
+        FontMetrics fontMetrics = board.getFontMetrics(small);
+
+        String message = "You are finished level "+board.getLevelScenarios().getActualLevel()+", press R for next";
+
+        g.setColor(Color.white);
+        g.setFont(small);
+        g.drawString(message,
+                (gameConfig.getWidth() - fontMetrics.stringWidth(message)) / 2,
+                gameConfig.getHeight() / 2);
+    }
+
+    private void gamePaused(Graphics g, Board board) {
+        printRunningBoard(g, board);
+
+        Font small = new Font(FONT_TYPE, Font.BOLD, 24);
+        FontMetrics fontMetrics = board.getFontMetrics(small);
 
         g.setColor(Color.cyan);
         g.setFont(small);

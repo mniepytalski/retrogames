@@ -1,6 +1,5 @@
 game:
   dot-size: 20
-  lattice: true
 
 resources:
   apple: Red_Apple.png

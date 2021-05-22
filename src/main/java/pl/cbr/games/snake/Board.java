@@ -65,7 +65,6 @@ public class Board extends JPanel implements ActionListener, Drawing {
 
     private void initLevel() {
         boardModel.init(levelScenarios.getLevel());
-        levelScenarios.setNextLevel();
     }
 
     @Override
@@ -73,53 +72,36 @@ public class Board extends JPanel implements ActionListener, Drawing {
         if ( debug ) {
             log.info("paintComponent, gameStatus:{}", gameStatus);
         }
-        if ( GameStatus.RUNNING == gameStatus || GameStatus.PAUSED == gameStatus ) {
+        if ( GameStatus.RUNNING == gameStatus
+                || GameStatus.PAUSED == gameStatus
+                || GameStatus.NEXT_LEVEL == gameStatus) {
             super.paintComponent(g);
             doDrawing(g);
         }
     }
 
     public void doDrawing(Graphics g) {
-        if ( debug ) {
-            log.info("doDrawing, gameStatus:{}", gameStatus);
-        }
-        if (boardModel.getPlayers().stream().anyMatch(player -> !player.getPlayerState().isInGame())) {
+        if (gameStatus != GameStatus.NEXT_LEVEL && boardModel.getPlayers().stream().noneMatch(player -> player.getPlayerState().isInGame())) {
             gameStatus = GameStatus.STOP;
         }
-        if ( gameStatus == GameStatus.RUNNING ) {
-            boardModel.getObjects().forEach(objectToDraw -> objectToDraw.doDrawing(g));
-            boardModel.getPlayers().forEach( objectToDraw -> objectToDraw.doDrawing(g));
-            if ( gameConfig.isLattice()) {
-                boardGraphics.drawLattice(g);
-            }
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawString("Level "+levelScenarios.getActualLevel(), 80, 14);
-        }
-        if ( gameStatus == GameStatus.STOP ) {
-            boardGraphics.gameOver(g,this);
-        }
-        if ( gameStatus == GameStatus.PAUSED) {
-            boardGraphics.gamePaused(g,this);
-        }
+        boardGraphics.printBoard(gameStatus,g,this);
         Toolkit.getDefaultToolkit().sync();
-    }
-
-    private Optional<BoardObject> checkCollisions(Player player) {
-        return boardModel.getObjects().stream().filter(wall ->
-                player.getPlayerModel().getHead().equals(wall.getPosition())
-        ).findFirst();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         boardModel.getPlayers().stream().filter(player -> player.getPlayerState().isInGame()).forEach(player -> {
-            Optional<BoardObject> optionalObject = checkCollisions(player);
+            Optional<BoardObject> optionalObject = boardModel.checkCollisions(player);
             if ( optionalObject.isPresent()) {
                 if ( optionalObject.get().isEndGame() ) {
                     gameStatus = GameStatus.STOP;
                     timer.stop();
                 } else {
                     optionalObject.get().action(player.getPlayerModel());
+                    if ( player.getPlayerModel().getPoints()>=levelScenarios.getLevel().getPointsToFinish() ) {
+                        levelScenarios.setNextLevel();
+                        gameStatus = GameStatus.NEXT_LEVEL;
+                    }
                 }
             }
             if (player.checkCollision() ) {

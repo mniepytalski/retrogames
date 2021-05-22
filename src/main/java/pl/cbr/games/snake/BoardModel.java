@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -65,6 +66,13 @@ public class BoardModel {
         return !duplicates.isEmpty();
     }
 
+    public Optional<BoardObject> checkCollisions(Player player) {
+        return getObjects().stream().filter(wall ->
+                player.getPlayerModel().getHead().equals(wall.getPosition())
+        ).findFirst();
+    }
+
+
     private void tryingToChangeDuplicatePosition() {
         int attempt = 1;
         int duplicates = getDuplicatesAndChangePosition();
@@ -98,4 +106,5 @@ public class BoardModel {
         Map<Point, List<BoardObject>> maps = objects.stream().collect(Collectors.groupingBy(BoardObject::getPosition));
         return maps.values().stream().filter(list -> list.size()>1).collect(Collectors.toList());
     }
+
 }
