@@ -13,6 +13,7 @@ public class BoardGraphics {
 
     private final GameConfig gameConfig;
     private final MessagesConfig messages;
+    private final GameResources gameResources;
 
     private static final String FONT_TYPE = "Courier";
 
@@ -35,8 +36,8 @@ public class BoardGraphics {
     }
 
     public void printBoard(GameStatus gameStatus, Graphics g, Board board) {
-        if ( gameStatus == GameStatus.NEXT_LEVEL ) {
-            nextLevel(g,board);
+        if ( gameStatus == GameStatus.START_LOGO ) {
+            printStartLogo(g,board);
         }
         if ( gameStatus == GameStatus.RUNNING ) {
             printRunningBoard(g,board);
@@ -47,6 +48,14 @@ public class BoardGraphics {
         if ( gameStatus == GameStatus.PAUSED) {
             gamePaused(g,board);
         }
+        if ( gameStatus == GameStatus.NEXT_LEVEL ) {
+            nextLevel(g,board);
+        }
+    }
+
+    private void printStartLogo(Graphics g, Board board) {
+        g.drawImage(gameResources.getStartLogo(), 0, 0, null);
+        printCenterText(g, board, Color.white, "Start game press R");
     }
 
     private void printRunningBoard(Graphics g, Board board) {
@@ -61,41 +70,27 @@ public class BoardGraphics {
     }
 
     private void gameOver(Graphics g, Board board) {
-        Font small = new Font(FONT_TYPE, Font.BOLD, 24);
-        FontMetrics fontMetrics = board.getFontMetrics(small);
-
-        g.setColor(Color.white);
-        g.setFont(small);
-        g.drawString(messages.getEndGame(),
-                (gameConfig.getWidth() - fontMetrics.stringWidth(messages.getEndGame())) / 2,
-                gameConfig.getHeight() / 2);
+        printCenterText(g, board, Color.white, messages.getEndGame());
     }
 
     private void nextLevel(Graphics g, Board board) {
         printRunningBoard(g, board);
-
-        Font small = new Font(FONT_TYPE, Font.BOLD, 24);
-        FontMetrics fontMetrics = board.getFontMetrics(small);
-
         String message = "You are finished level "+board.getLevelScenarios().getActualLevel()+", press R for next";
-
-        g.setColor(Color.white);
-        g.setFont(small);
-        g.drawString(message,
-                (gameConfig.getWidth() - fontMetrics.stringWidth(message)) / 2,
-                gameConfig.getHeight() / 2);
+        printCenterText(g, board, Color.white, message);
     }
 
     private void gamePaused(Graphics g, Board board) {
         printRunningBoard(g, board);
+        printCenterText(g, board, Color.cyan, "Paused");
+    }
 
+    private void printCenterText(Graphics g, Board board, Color color, String text) {
         Font small = new Font(FONT_TYPE, Font.BOLD, 24);
         FontMetrics fontMetrics = board.getFontMetrics(small);
-
-        g.setColor(Color.cyan);
+        g.setColor(color);
         g.setFont(small);
-        g.drawString("Paused",
-                (gameConfig.getWidth() - fontMetrics.stringWidth(messages.getEndGame())) / 2,
+        g.drawString(text,
+                (gameConfig.getWidth() - fontMetrics.stringWidth(text)) / 2,
                 gameConfig.getHeight() / 2);
     }
 }

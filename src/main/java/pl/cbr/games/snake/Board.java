@@ -51,6 +51,7 @@ public class Board extends JPanel implements ActionListener, Drawing {
         boardGraphics.init(this);
         timer = new Timer(DELAY, this);
         timer.start();
+        gameStatus = GameStatus.START_LOGO;
         initGame();
     }
 
@@ -60,7 +61,6 @@ public class Board extends JPanel implements ActionListener, Drawing {
         if (!timer.isRunning()) {
             timer.start();
         }
-        gameStatus = GameStatus.RUNNING;
     }
 
     private void initLevel() {
@@ -72,17 +72,23 @@ public class Board extends JPanel implements ActionListener, Drawing {
         if ( debug ) {
             log.info("paintComponent, gameStatus:{}", gameStatus);
         }
-        if ( GameStatus.RUNNING == gameStatus
-                || GameStatus.PAUSED == gameStatus
-                || GameStatus.NEXT_LEVEL == gameStatus) {
-            super.paintComponent(g);
-            doDrawing(g);
+        switch(gameStatus) {
+            case RUNNING:
+            case PAUSED:
+            case NEXT_LEVEL:
+            case START_LOGO:
+                super.paintComponent(g);
+                doDrawing(g);
+                break;
+            default:
         }
     }
 
     public void doDrawing(Graphics g) {
-        if (gameStatus != GameStatus.NEXT_LEVEL && boardModel.getPlayers().stream().noneMatch(player -> player.getPlayerState().isInGame())) {
-            gameStatus = GameStatus.STOP;
+        if ( gameStatus!=GameStatus.NEXT_LEVEL&& gameStatus!=GameStatus.START_LOGO) {
+            if (boardModel.getPlayers().stream().noneMatch(player -> player.getPlayerState().isInGame())) {
+                gameStatus = GameStatus.STOP;
+            }
         }
         boardGraphics.printBoard(gameStatus,g,this);
         Toolkit.getDefaultToolkit().sync();

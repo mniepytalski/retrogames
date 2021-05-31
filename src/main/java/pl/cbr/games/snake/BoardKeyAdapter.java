@@ -16,7 +16,10 @@ public class BoardKeyAdapter extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         board.getBoardModel().getPlayers().forEach(player -> player.keyPressed(e));
-        if ( e.getKeyCode() == KeyEvent.VK_R ) board.initGame();
+        if ( e.getKeyCode() == KeyEvent.VK_R ) {
+            board.setGameStatus(GameStatus.RUNNING);
+            board.initGame();
+        }
         if ( e.getKeyCode() == KeyEvent.VK_P ) pauseLogic();
         if ( e.getKeyCode() == KeyEvent.VK_B ) board.setDebug(!board.isDebug());
         if ( board.isDebug() ) {

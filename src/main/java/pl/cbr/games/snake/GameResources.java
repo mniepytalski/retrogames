@@ -1,14 +1,20 @@
 package pl.cbr.games.snake;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pl.cbr.games.snake.config.ResourcesConfig;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 @Component
 public class GameResources {
 
@@ -50,8 +56,12 @@ public class GameResources {
 
             resources.put("lemon",(new ImageIcon(Objects.requireNonNull(
                     cLoader.getResource(IMAGES_DIR+resourcesConfig.getLemon())))).getImage());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+
+            BufferedImage img = ImageIO.read(new File(cLoader.getResource(IMAGES_DIR+resourcesConfig.getStartLogo()).getFile()));
+                resources.put("startLogo", img);
+
+        } catch (ClassNotFoundException | IOException  e) {
+            log.error("",e);
         }
     }
 
@@ -73,5 +83,9 @@ public class GameResources {
 
     public Image getLemon() {
         return resources.get("lemon");
+    }
+
+    public Image getStartLogo() {
+        return resources.get("startLogo");
     }
 }
