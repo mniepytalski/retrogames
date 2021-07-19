@@ -33,6 +33,11 @@ game:
 messages:
   title: SnAkE
   end-game: Game Over, restart press R
+  paused-game: Paused
+  start-game: Start game press R
+  next-level: You are finished level {}, press R for next
+  level-info: Level {}
+  all-points-to-finish: All points {}
 
 resources:
   ball0: dot0.png

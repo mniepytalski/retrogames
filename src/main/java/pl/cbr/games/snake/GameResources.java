@@ -32,24 +32,20 @@ public class GameResources {
     private void loadImages() {
 
         try {
-            Class cls = Class.forName("pl.cbr.games.snake.GameResources");
-            ClassLoader cLoader = cls.getClassLoader();
+            Class<?> cls = Class.forName("pl.cbr.games.snake.GameResources");
+            var cLoader = cls.getClassLoader();
 
-            ImageIcon iid0 = new ImageIcon(Objects.requireNonNull(
-                    cLoader.getResource(IMAGES_DIR+resourcesConfig.getBall0())));
-            resources.put("ball0", iid0.getImage());
+            resources.put("ball0", (new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource(IMAGES_DIR+resourcesConfig.getBall0())))).getImage());
 
-            ImageIcon iid1 = new ImageIcon(Objects.requireNonNull(
-                    cLoader.getResource(IMAGES_DIR+resourcesConfig.getBall1())));
-            resources.put("ball1", iid1.getImage());
+            resources.put("ball1", (new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource(IMAGES_DIR+resourcesConfig.getBall1())))).getImage());
 
-            ImageIcon iia = new ImageIcon(Objects.requireNonNull(
-                    cLoader.getResource(IMAGES_DIR+resourcesConfig.getApple())));
-            resources.put("apple", iia.getImage());
+            resources.put("apple", (new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource(IMAGES_DIR+resourcesConfig.getApple())))).getImage());
 
-            ImageIcon iih = new ImageIcon(Objects.requireNonNull(
-                    cLoader.getResource(IMAGES_DIR+resourcesConfig.getHead())));
-            resources.put("head", iih.getImage());
+            resources.put("head", (new ImageIcon(Objects.requireNonNull(
+                    cLoader.getResource(IMAGES_DIR+resourcesConfig.getHead())))).getImage());
 
             resources.put("wall",(new ImageIcon(Objects.requireNonNull(
                     cLoader.getResource(IMAGES_DIR+resourcesConfig.getWall())))).getImage());
@@ -57,7 +53,8 @@ public class GameResources {
             resources.put("lemon",(new ImageIcon(Objects.requireNonNull(
                     cLoader.getResource(IMAGES_DIR+resourcesConfig.getLemon())))).getImage());
 
-            BufferedImage img = ImageIO.read(new File(cLoader.getResource(IMAGES_DIR+resourcesConfig.getStartLogo()).getFile()));
+            BufferedImage img = ImageIO.read(new File(Objects.requireNonNull(
+                    cLoader.getResource(IMAGES_DIR + resourcesConfig.getStartLogo())).getFile()));
                 resources.put("startLogo", img);
 
         } catch (ClassNotFoundException | IOException  e) {

@@ -1,7 +1,11 @@
-package pl.cbr.games.snake;
+package pl.cbr.games.snake.gfx;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
+import pl.cbr.games.snake.Board;
+import pl.cbr.games.snake.BoardKeyAdapter;
+import pl.cbr.games.snake.GameResources;
+import pl.cbr.games.snake.GameStatus;
 import pl.cbr.games.snake.config.GameConfig;
 import pl.cbr.games.snake.config.MessagesConfig;
 
@@ -55,7 +59,7 @@ public class BoardGraphics {
 
     private void printStartLogo(Graphics g, Board board) {
         g.drawImage(gameResources.getStartLogo(), 0, 0, null);
-        printCenterText(g, board, Color.white, "Start game press R");
+        printCenterText(g, board, Color.white, messages.getStartGame());
     }
 
     private void printRunningBoard(Graphics g, Board board) {
@@ -65,8 +69,8 @@ public class BoardGraphics {
             drawLattice(g);
         }
         g.setColor(Color.LIGHT_GRAY);
-        g.drawString("Level "+(board.getLevelScenarios().getActualLevel()+1), 80, 14);
-        g.drawString("All points "+(board.getLevelScenarios().getLevel().getPointsToFinish()), 140, 14);
+        g.drawString(format(messages.getLevelInfo(), (board.getLevelScenarios().getActualLevel()+1)), 80, 14);
+        g.drawString(format(messages.getAllPointsToFinish(), board.getLevelScenarios().getLevel().getPointsToFinish()), 140, 14);
     }
 
     private void gameOver(Graphics g, Board board) {
@@ -75,13 +79,13 @@ public class BoardGraphics {
 
     private void nextLevel(Graphics g, Board board) {
         printRunningBoard(g, board);
-        String message = "You are finished level "+board.getLevelScenarios().getActualLevel()+", press R for next";
+        String message = format(messages.getNextLevel(),board.getLevelScenarios().getActualLevel());
         printCenterText(g, board, Color.white, message);
     }
 
     private void gamePaused(Graphics g, Board board) {
         printRunningBoard(g, board);
-        printCenterText(g, board, Color.cyan, "Paused");
+        printCenterText(g, board, Color.cyan, messages.getPausedGame());
     }
 
     private void printCenterText(Graphics g, Board board, Color color, String text) {
@@ -92,5 +96,9 @@ public class BoardGraphics {
         g.drawString(text,
                 (gameConfig.getWidth() - fontMetrics.stringWidth(text)) / 2,
                 gameConfig.getHeight() / 2);
+    }
+
+    private String format(String message, Object val) {
+        return message.replaceFirst("\\{}",""+val);
     }
 }

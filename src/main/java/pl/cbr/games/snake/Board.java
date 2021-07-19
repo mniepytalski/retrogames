@@ -5,14 +5,13 @@ import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pl.cbr.games.snake.config.GameConfig;
+import pl.cbr.games.snake.gfx.BoardGraphics;
 import pl.cbr.games.snake.levels.LevelScenarios;
-import pl.cbr.games.snake.objects.BoardObject;
 import pl.cbr.games.snake.player.Player;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Optional;
 import javax.swing.*;
 
 @EqualsAndHashCode(callSuper = true)
@@ -25,7 +24,7 @@ public class Board extends JPanel implements ActionListener, Drawing {
     private boolean debug = false;
     private GameStatus gameStatus = GameStatus.RUNNING;
 
-    private final static int DELAY;
+    private static final int DELAY;
 
     private final transient GameConfig gameConfig;
     private final transient BoardGraphics boardGraphics;
@@ -85,10 +84,9 @@ public class Board extends JPanel implements ActionListener, Drawing {
     }
 
     public void doDrawing(Graphics g) {
-        if ( gameStatus!=GameStatus.NEXT_LEVEL&& gameStatus!=GameStatus.START_LOGO) {
-            if (boardModel.getPlayers().stream().noneMatch(player -> player.getPlayerState().isInGame())) {
-                gameStatus = GameStatus.STOP;
-            }
+        if (gameStatus != GameStatus.NEXT_LEVEL && gameStatus != GameStatus.START_LOGO &&
+                boardModel.getPlayers().stream().noneMatch(player -> player.getPlayerState().isInGame())) {
+            gameStatus = GameStatus.STOP;
         }
         boardGraphics.printBoard(gameStatus,g,this);
         Toolkit.getDefaultToolkit().sync();
@@ -97,19 +95,19 @@ public class Board extends JPanel implements ActionListener, Drawing {
     @Override
     public void actionPerformed(ActionEvent e) {
         boardModel.getPlayers().stream().filter(player -> player.getPlayerState().isInGame()).forEach(player -> {
-            Optional<BoardObject> optionalObject = boardModel.checkCollisions(player);
-            if ( optionalObject.isPresent()) {
-                if ( optionalObject.get().isEndGame() ) {
+            boardModel.checkCollisions(player).ifPresent(boardObject -> {
+                if ( boardObject.isEndGame() ) {
                     gameStatus = GameStatus.STOP;
                     timer.stop();
                 } else {
-                    optionalObject.get().action(player.getPlayerModel());
+                    boardObject.action(player.getPlayerModel());
                     if ( player.getPlayerModel().getPoints()>=levelScenarios.getLevel().getPointsToFinish() ) {
                         levelScenarios.setNextLevel();
                         gameStatus = GameStatus.NEXT_LEVEL;
                     }
                 }
             }
+            );
             if (player.checkCollision() ) {
                 gameStatus = GameStatus.STOP;
                 timer.stop();

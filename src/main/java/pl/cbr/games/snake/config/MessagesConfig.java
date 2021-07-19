@@ -10,4 +10,9 @@ import org.springframework.context.annotation.Configuration;
 public class MessagesConfig {
     String title;
     String endGame;
+    String pausedGame;
+    String startGame;
+    String nextLevel;
+    String levelInfo;
+    String allPointsToFinish;
 }

@@ -28,7 +28,7 @@ public class LevelScenarios {
         levels.add((new Level(70,20,20,7)));
         levels.add((new Level(80,35,20,8)));
 
-        levels.add((new Level(100,5,100,15)));
+        levels.add((new Level(50,5,100,15)));
 
         levels.add((new Level(200,200,0,5)));
     }
