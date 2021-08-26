@@ -18,13 +18,11 @@ public class Collision {
         List<Point> pointsToCheck = new ArrayList<>(points);
         pointsToCheck.add(point);
         Set<Point> allItems = new HashSet<>();
-        Set<Point> duplicates = pointsToCheck.stream().filter(n -> !allItems.add(n)).collect(Collectors.toSet());
-        return !duplicates.isEmpty();
+        return !pointsToCheck.stream().filter(n -> !allItems.add(n)).collect(Collectors.toSet()).isEmpty();
     }
 
     public boolean check(List<Point> points1, List<Point> points2) {
         Set<Point> allItems = new HashSet<>(points1);
-        Set<Point> duplicates = points2.stream().filter(n -> !allItems.add(n)).collect(Collectors.toSet());
-        return !duplicates.isEmpty();
+        return !points2.stream().filter(n -> !allItems.add(n)).collect(Collectors.toSet()).isEmpty();
     }
 }

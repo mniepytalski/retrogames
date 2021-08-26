@@ -40,7 +40,7 @@ public class BoardModel {
         objects = new ArrayList<>();
         players = new ArrayList<>();
 
-        board = new Rectangle(new Point(0,0),
+        board = new Rectangle(new Point(),
                 (new Point(gameConfig.getWidth(),gameConfig.getHeight())).division(gameConfig.getDotSize()));
     }
 
@@ -67,8 +67,7 @@ public class BoardModel {
     }
 
     public Optional<BoardObject> checkCollisions(Player player) {
-        return getObjects().stream().filter(wall ->
-                player.getPlayerModel().getHead().equals(wall.getPosition())
+        return getObjects().stream().filter(wall -> player.getPlayerModel().getHead().equals(wall.getPosition())
         ).findFirst();
     }
 
@@ -91,14 +90,7 @@ public class BoardModel {
 
     private int getDuplicatesAndChangePosition() {
         List<List<BoardObject>> duplicates = detectDuplicates();
-        for (List<BoardObject> dup : duplicates ) {
-            int x = 0;
-            for ( BoardObject object: dup ) {
-                if ( x++ > 0 ) {
-                    object.setRandomPosition();
-                }
-            }
-        }
+        duplicates.forEach((dup) -> dup.forEach(BoardObject::setRandomPosition));
         return duplicates.size();
     }
 
@@ -106,5 +98,4 @@ public class BoardModel {
         Map<Point, List<BoardObject>> maps = objects.stream().collect(Collectors.groupingBy(BoardObject::getPosition));
         return maps.values().stream().filter(list -> list.size()>1).collect(Collectors.toList());
     }
-
 }
