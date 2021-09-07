@@ -24,7 +24,7 @@ public class DirectionService {
         if ( directions.containsKey(direction) ) {
             return directions.get(direction);
         } else {
-            return new Point(0,0);
+            return new Point();
         }
     }
 }

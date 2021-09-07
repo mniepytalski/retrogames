@@ -40,20 +40,12 @@ public class BoardGraphics {
     }
 
     public void printBoard(GameStatus gameStatus, Graphics g, Board board) {
-        if ( gameStatus == GameStatus.START_LOGO ) {
-            printStartLogo(g,board);
-        }
-        if ( gameStatus == GameStatus.RUNNING ) {
-            printRunningBoard(g,board);
-        }
-        if ( gameStatus == GameStatus.STOP ) {
-            gameOver(g,board);
-        }
-        if ( gameStatus == GameStatus.PAUSED) {
-            gamePaused(g,board);
-        }
-        if ( gameStatus == GameStatus.NEXT_LEVEL ) {
-            nextLevel(g,board);
+        switch(gameStatus) {
+            case START_LOGO -> printStartLogo(g, board);
+            case RUNNING -> printRunningBoard(g, board);
+            case STOP -> gameOver(g, board);
+            case PAUSED -> gamePaused(g, board);
+            case NEXT_LEVEL -> nextLevel(g, board);
         }
     }
 

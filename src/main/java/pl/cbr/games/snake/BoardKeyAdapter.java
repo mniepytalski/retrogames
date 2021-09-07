@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 @Slf4j
 public class BoardKeyAdapter extends KeyAdapter {
 
-    Board board;
+    private final Board board;
     public BoardKeyAdapter(Board board) {
         this.board = board;
     }
@@ -22,9 +22,7 @@ public class BoardKeyAdapter extends KeyAdapter {
         }
         if ( e.getKeyCode() == KeyEvent.VK_P ) pauseLogic();
         if ( e.getKeyCode() == KeyEvent.VK_B ) board.setDebug(!board.isDebug());
-        if ( board.isDebug() ) {
-            log.info("{} key, debug: {}, running:{}",(new StringBuffer()).append(e.getKeyChar()), board.isDebug(), board.getTimer().isRunning());
-        }
+        log.debug("{} key, debug: {}, running:{}",(new StringBuffer()).append(e.getKeyChar()), board.isDebug(), board.getTimer().isRunning());
     }
 
     private void pauseLogic() {

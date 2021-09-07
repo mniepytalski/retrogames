@@ -20,7 +20,7 @@ public abstract class BoardObject implements Drawing {
         this.boardModel = boardModel;
         this.gameConfig = gameConfig;
         this.gameResources = gameResources;
-        this.position = new Point(0,0);
+        this.position = new Point();
     }
 
     public void setRandomPosition() {
