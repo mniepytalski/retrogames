@@ -22,8 +22,6 @@ public class Player implements Drawing {
     private PlayerState playerState;
     private PlayerModel playerModel;
 
-    private int points;
-
     private static int idGenerator = 1;
 
     public Player(PlayerConfig playerConfig, GameConfig gameConfig, GameResources gameResources) {
@@ -49,7 +47,7 @@ public class Player implements Drawing {
             getPlayerState().setInGame(false);
             return false;
         }
-        Rectangle boardRectangle = new Rectangle(new Point(0,0),
+        Rectangle boardRectangle = new Rectangle(new Point(),
                 (new Point(gameConfig.getWidth(),gameConfig.getHeight())).division(gameConfig.getDotSize()));
         if (getPlayerModel().isOutside(boardRectangle)) {
             getPlayerState().setInGame(false);
@@ -73,11 +71,6 @@ public class Player implements Drawing {
             }
         }
         g.setColor(Color.LIGHT_GRAY);
-        int pointsFromModel = 0;
-        if (playerModel!=null) {
-            pointsFromModel = playerModel.getPoints();
-        }
-
-        g.drawString(playerConfig.getName()+": "+pointsFromModel,10,14*id);
+        g.drawString(playerConfig.getName()+": "+getPlayerModel().getPoints(),10,14*id);
     }
 }

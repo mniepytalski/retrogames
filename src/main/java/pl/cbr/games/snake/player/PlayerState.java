@@ -27,21 +27,16 @@ public class PlayerState {
     }
 
     void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
-
-        if ((key == playerControlConfiguration.getLeftKey()) && (getDirection()!=MoveDirection.RIGHT)) {
+        if ((e.getKeyCode() == playerControlConfiguration.getLeftKey()) && (getDirection()!=MoveDirection.RIGHT)) {
             direction = MoveDirection.LEFT;
         }
-
-        if ((key == playerControlConfiguration.getRightKey()) && (getDirection()!=MoveDirection.LEFT)) {
+        if ((e.getKeyCode() == playerControlConfiguration.getRightKey()) && (getDirection()!=MoveDirection.LEFT)) {
             direction = MoveDirection.RIGHT;
         }
-
-        if ((key == playerControlConfiguration.getUpKey()) && (getDirection()!=MoveDirection.DOWN)) {
+        if ((e.getKeyCode() == playerControlConfiguration.getUpKey()) && (getDirection()!=MoveDirection.DOWN)) {
             direction = MoveDirection.UP;
         }
-
-        if ((key == playerControlConfiguration.getDownKey()) && (getDirection()!=MoveDirection.UP)) {
+        if ((e.getKeyCode() == playerControlConfiguration.getDownKey()) && (getDirection()!=MoveDirection.UP)) {
             direction = MoveDirection.DOWN;
         }
     }

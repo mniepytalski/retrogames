@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "messages")
 public class MessagesConfig {
-    String title;
-    String endGame;
-    String pausedGame;
-    String startGame;
-    String nextLevel;
-    String levelInfo;
-    String allPointsToFinish;
+    private String title;
+    private String endGame;
+    private String pausedGame;
+    private String startGame;
+    private String nextLevel;
+    private String levelInfo;
+    private String allPointsToFinish;
 }

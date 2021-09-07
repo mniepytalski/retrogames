@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 @Slf4j
 public class BoardKeyAdapter extends KeyAdapter {
 
-    Board board;
+    private final Board board;
     public BoardKeyAdapter(Board board) {
         this.board = board;
     }
