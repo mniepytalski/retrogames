@@ -17,5 +17,5 @@ public class GameConfig {
     private int dotsOnStart;
     private boolean lattice;
     private int apples;
-    private List<PlayerConfig> players = new ArrayList<>();
+    private List<PlayerAndControlsConfig> players = new ArrayList<>();
 }

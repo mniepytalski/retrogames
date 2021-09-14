@@ -19,7 +19,7 @@ public class Player implements Drawing {
     private final GameResources gameResources;
 
 	private int id;
-    private PlayerState playerState;
+    PlayerState playerState;
     private PlayerModel playerModel;
 
     private static int idGenerator = 1;
@@ -29,7 +29,6 @@ public class Player implements Drawing {
         this.gameConfig = gameConfig;
         this.playerConfig = playerConfig;
         this.gameResources = gameResources;
-        playerState = new PlayerState(playerConfig.getControl());
         playerModel = new PlayerModel(gameConfig);
     }
 

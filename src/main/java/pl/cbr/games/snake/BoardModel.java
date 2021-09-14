@@ -71,6 +71,14 @@ public class BoardModel {
         ).findFirst();
     }
 
+    public Optional<BoardObject> checkCollisions(Point playerPosition) {
+        return getObjects().stream().filter(wall -> playerPosition.equals(wall.getPosition())
+        ).findFirst();
+    }
+
+    public boolean isOutsideBoard(Point position) {
+        return getBoard().isOutside(position);
+    }
 
     private void tryingToChangeDuplicatePosition() {
         int attempt = 1;

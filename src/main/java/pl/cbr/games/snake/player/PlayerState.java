@@ -15,10 +15,18 @@ public class PlayerState {
 
     private PlayerControlConfiguration playerControlConfiguration;
 
+    private boolean controls;
+
+    public PlayerState() {
+        initState();
+        controls = false;
+    }
+
     public PlayerState(ControlConfig controlConfig) {
         PlayerConfigMapper playerConfigMapper = new PlayerConfigMapper();
         this.playerControlConfiguration = playerConfigMapper.map(controlConfig);
         initState();
+        controls = true;
     }
 
     public void initState() {
@@ -27,6 +35,9 @@ public class PlayerState {
     }
 
     void keyPressed(KeyEvent e) {
+        if ( !controls ) {
+            return;
+        }
         if ((e.getKeyCode() == playerControlConfiguration.getLeftKey()) && (getDirection()!=MoveDirection.RIGHT)) {
             direction = MoveDirection.LEFT;
         }

@@ -5,4 +5,4 @@
 mvn install
 
 ## Run
-java -jar target/snake-1.0-SNAPSHOT.jar
+mvn spring-boot:run

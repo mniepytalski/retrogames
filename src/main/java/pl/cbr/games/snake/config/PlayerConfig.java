@@ -1,10 +1,13 @@
 package pl.cbr.games.snake.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PlayerConfig {
-    private String name;
-    private PositionConfig position = new PositionConfig();
-    private ControlConfig control = new ControlConfig();
+    String name;
+    PositionConfig position = new PositionConfig();
 }

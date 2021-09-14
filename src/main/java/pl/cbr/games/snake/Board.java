@@ -5,13 +5,19 @@ import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pl.cbr.games.snake.config.GameConfig;
+import pl.cbr.games.snake.config.PlayerConfig;
+import pl.cbr.games.snake.config.PositionConfig;
 import pl.cbr.games.snake.gfx.BoardGraphics;
 import pl.cbr.games.snake.levels.LevelScenarios;
+import pl.cbr.games.snake.player.BotPlayer;
+import pl.cbr.games.snake.player.LivePlayer;
 import pl.cbr.games.snake.player.Player;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
 @EqualsAndHashCode(callSuper = true)
@@ -32,6 +38,8 @@ public class Board extends JPanel implements ActionListener, Drawing {
     private final transient BoardModel boardModel;
     private final transient LevelScenarios levelScenarios;
 
+    private final List<BotPlayer> botPlayers;
+
     static {
         DELAY = 200;
     }
@@ -42,7 +50,16 @@ public class Board extends JPanel implements ActionListener, Drawing {
         this.boardModel = boardModel;
         this.levelScenarios = levelScenarios;
         this.gameResources = gameResources;
-        this.gameConfig.getPlayers().forEach(playerConfig -> boardModel.addPlayer(new Player(playerConfig, gameConfig, gameResources)));
+        botPlayers = new ArrayList<>();
+
+        this.gameConfig.getPlayers().forEach(playerConfig -> boardModel.addPlayer(new LivePlayer(playerConfig, gameConfig, gameResources)));
+        // TODO
+        // add it to level scenarios
+        // add collision with other players
+        // in case of death not finishing level
+//        BotPlayer botPlayer = new BotPlayer(boardModel, new PlayerConfig("Bot1", new PositionConfig(2,2)),  gameConfig, gameResources);
+//        boardModel.addPlayer(botPlayer);
+//        botPlayers.add(botPlayer);
         initBoard();
     }
 
@@ -69,16 +86,18 @@ public class Board extends JPanel implements ActionListener, Drawing {
     @Override
     public void paintComponent(Graphics g) {
         log.debug("paintComponent, gameStatus:{}", gameStatus);
-        switch(gameStatus) {
-            case RUNNING, PAUSED, NEXT_LEVEL, START_LOGO:
+        switch (gameStatus) {
+            case RUNNING, PAUSED, NEXT_LEVEL, START_LOGO -> {
                 super.paintComponent(g);
                 doDrawing(g);
-                break;
-            default:
+            }
+            default -> {
+            }
         }
     }
 
     public void doDrawing(Graphics g) {
+        calcBotMoves();
         if (gameStatus != GameStatus.NEXT_LEVEL && gameStatus != GameStatus.START_LOGO &&
                 boardModel.getPlayers().stream().noneMatch(player -> player.getPlayerState().isInGame())) {
             gameStatus = GameStatus.STOP;
@@ -112,5 +131,9 @@ public class Board extends JPanel implements ActionListener, Drawing {
             }
         });
         repaint();
+    }
+
+    private void calcBotMoves() {
+        botPlayers.stream().forEach(BotPlayer::moveBot);
     }
 }
