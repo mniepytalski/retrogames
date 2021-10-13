@@ -32,30 +32,54 @@ public class MoveStrategyBase {
 
     void opositeDirection() {
         switch(player.getPlayerState().getDirection()) {
-            case RIGHT -> setDirection(MoveDirection.LEFT);
-            case DOWN -> setDirection(MoveDirection.UP);
-            case LEFT -> setDirection(MoveDirection.RIGHT);
-            case UP -> setDirection(MoveDirection.DOWN);
+            case RIGHT:
+                setDirection(MoveDirection.LEFT);
+                break;
+            case DOWN:
+                setDirection(MoveDirection.UP);
+                break;
+            case LEFT:
+                setDirection(MoveDirection.RIGHT);
+                break;
+            case UP:
+                setDirection(MoveDirection.DOWN);
+                break;
         }
         youCanMove();
     }
 
     void turnLeft() {
         switch(player.getPlayerState().getDirection()) {
-            case RIGHT -> setDirection(MoveDirection.UP);
-            case DOWN -> setDirection(MoveDirection.RIGHT);
-            case LEFT -> setDirection(MoveDirection.DOWN);
-            case UP -> setDirection(MoveDirection.LEFT);
+            case RIGHT:
+                setDirection(MoveDirection.UP);
+                break;
+            case DOWN:
+                setDirection(MoveDirection.RIGHT);
+                break;
+            case LEFT:
+                setDirection(MoveDirection.DOWN);
+                break;
+            case UP:
+                setDirection(MoveDirection.LEFT);
+                break;
         }
         youCanMove();
     }
 
     void turnRight() {
         switch(player.getPlayerState().getDirection()) {
-            case RIGHT -> setDirection(MoveDirection.DOWN);
-            case DOWN -> setDirection(MoveDirection.LEFT);
-            case LEFT -> setDirection(MoveDirection.UP);
-            case UP -> setDirection(MoveDirection.RIGHT);
+            case RIGHT:
+                setDirection(MoveDirection.DOWN);
+                break;
+            case DOWN:
+                setDirection(MoveDirection.LEFT);
+                break;
+            case LEFT:
+                setDirection(MoveDirection.UP);
+                break;
+            case UP:
+                setDirection(MoveDirection.RIGHT);
+                break;
         }
         youCanMove();
     }
